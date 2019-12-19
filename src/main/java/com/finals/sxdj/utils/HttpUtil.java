@@ -194,6 +194,7 @@ public class HttpUtil {
     public String getLastInterfaceToken(){
         Map accessToken = redisTemplate.opsForHash().entries("interfaceToken");
         String accessTokenStr = null;
+        System.out.println(System.currentTimeMillis() + "|" + ((Date)accessToken.get("limitTime")).getTime());
         if(accessToken == null
                 || accessToken.get("tokenValue") == null
                 || accessToken.get("limitTime") == null
