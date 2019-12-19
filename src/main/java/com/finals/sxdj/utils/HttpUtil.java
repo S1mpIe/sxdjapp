@@ -191,13 +191,13 @@ public class HttpUtil {
      * 获取最新的access_token
      * @return
      */
-    public String getLastAccessToken(){
-        Map accessToken = redisTemplate.opsForHash().entries("accessToken");
+    public String getLastInterfaceToken(){
+        Map accessToken = redisTemplate.opsForHash().entries("interfaceToken");
         String accessTokenStr = null;
         if(accessToken == null
                 || accessToken.get("tokenValue") == null
                 || accessToken.get("limitTime") == null
-                || System.currentTimeMillis() - ((Date)accessToken.get("limitTime")).getTime()>= 72){
+                || System.currentTimeMillis() - ((Date)accessToken.get("limitTime")).getTime()>= 7200000){
             HashMap<String,String> attributes = new HashMap<>();
             attributes.put("grant_type","client_credential");
             attributes.put("appid",appId);
@@ -205,10 +205,10 @@ public class HttpUtil {
             JSONObject jsonObject = sendGetRequest(null, attributes, tokenUrl);
             accessTokenStr = (String) jsonObject.get("access_token");
             Date date = new Date(System.currentTimeMillis());
-            redisTemplate.opsForHash().put("accessToken","tokenValue",accessTokenStr);
-            redisTemplate.opsForHash().put("accessToken","limitTime",date);
+            redisTemplate.opsForHash().put("interfaceToken","tokenValue",accessTokenStr);
+            redisTemplate.opsForHash().put("interfaceToken","limitTime",date);
         }else {
-            accessTokenStr = (String) redisTemplate.opsForHash().get("accessToken","tokenValue");
+            accessTokenStr = (String) redisTemplate.opsForHash().get("interfaceToken","tokenValue");
         }
         return accessTokenStr;
     }

@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/learnnotice?serverTimezone=GMT&useSSL=false&useAffectedRows=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://127.0.0.1:3306/sxdj?characterEncoding=utf8&serverTimezone=GMT&useSSL=false&useAffectedRows=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
     username: root
-    password: 'wstly1221'
+    password: '!Wstly1221'
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
   redis:
@@ -20,6 +20,12 @@ spring:
     lettuce:
       shutdown-timeout: 10000
     password: '!Wstly1221'
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mappers/*.xml
+  type-aliases-package: com.finals.sxdj.model
 
 appId: wx22d909d630733411
 

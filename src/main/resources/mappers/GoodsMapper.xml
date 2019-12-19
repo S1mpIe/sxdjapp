@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finals.sxdj.repository.GoodsMapper">
+    <resultMap id="GoodsData" type="GoodsData" autoMapping="true"/>
+    <select id="queryGoodsByRecommend" resultMap="GoodsData" parameterType="int">
+        select g.id as id,
+               g.image_address as imageUrl,
+               g.category as category,
+               f.name as origin,
+               (gn.number-gn.sale_number) as number,
+               gn.unit as numberUnit,
+               gp.number as price,
+               gp.unti as priceUnit
+        from recommend_goods rg
+                 left join goods g on g.id=rg.goods_id
+                 left join farmers f on f.id=g.origin_id
+                 left join goods_number gn on gn.goods_id=g.id
+                 left join goods_price gp on gp.goods_id=g.id
+        where rg.recommend_id=#{recommendId} and rg.if_on=1 and g.if_delete=0
+    </select>
+
+    <select id="queryGoodsByCategory" resultMap="GoodsData" parameterType="String">
+        select g.id as id,
+               g.image_address as imageUrl,
+               g.category as category,
+               f.name as origin,
+               (gn.number-gn.sale_number) as number,
+               gn.unit as numberUnit,
+               gp.number as price,
+               gp.unti as priceUnit
+        from goods g
+                 left join farmers f on f.id=g.origin_id
+                 left join goods_number gn on gn.goods_id=g.id
+                 left join goods_price gp on gp.goods_id=g.id
+        where g.category=#{category} and g.if_delete=0
+    </select>
+</mapper>

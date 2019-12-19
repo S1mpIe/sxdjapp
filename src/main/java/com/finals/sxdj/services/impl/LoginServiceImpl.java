@@ -31,7 +31,7 @@ public class LoginServiceImpl implements LoginService {
         attributes.put("appid",appId);
         attributes.put("secret",secret);
         attributes.put("grant_type","authorization_code");
-        System.out.println(httpUtil.getLastAccessToken());
+        System.out.println(httpUtil.getLastInterfaceToken());
         return HttpUtil.sendGetRequest(heads,attributes,loginUrl);
     }
 }
