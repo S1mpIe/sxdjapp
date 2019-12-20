@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="034ffb41-d917-4918-9ad3-94d464542b6a" name="Default Changelist" comment="Init...">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/finals/sxdj/SxdjApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/finals/sxdj/SxdjApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/finals/sxdj/model/sqlmodel/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/finals/sxdj/model/sqlmodel/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/finals/sxdj/services/impl/InitServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/finals/sxdj/services/impl/InitServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sxdj.iml" beforeDir="false" afterPath="$PROJECT_DIR$/sxdj.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/finals/sxdj/controller/InitController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/finals/sxdj/controller/InitController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +148,7 @@
       <workItem from="1576682390385" duration="1806000" />
       <workItem from="1576745545401" duration="2730000" />
       <workItem from="1576753905342" duration="7427000" />
-      <workItem from="1576806447372" duration="3543000" />
+      <workItem from="1576806447372" duration="4583000" />
     </task>
     <task id="LOCAL-00001" summary="Init...">
       <created>1575376959543</created>
