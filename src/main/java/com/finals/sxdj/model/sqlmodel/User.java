@@ -15,7 +15,7 @@ public class User {
     private String name;
     private String realName;
     private String address;
-    private String image_address;
+    private String imageAddress;
     private String phoneNumber;
     private String sex;
     private String userCate;
