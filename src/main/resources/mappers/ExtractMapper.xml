@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finals.sxdj.repository.ExtractMapper">
+    <resultMap id="ExtractPoints" type="ExtractPoint" autoMapping="true"/>
+
+    <select id="queryAllPoint" resultMap="ExtractPoints" parameterType="String" >
+        select * from extract_point
+        where status like ${status};
+    </select>
+
+    <insert id="insertNewPoint" parameterType="ExtractPoint">
+        insert into extract_point (name,id_number, occupation, phone_number, address, area, advantage, status)
+        values (#{name},#{idNumber},#{occupation},#{phoneNumber},#{address},#{area},#{advantage},'待审核')
+    </insert>
+
+    <update id="updatePointStatus" parameterType="String">
+        update extract_point set status=${status} where id=${pointId};
+    </update>
+
+
+</mapper>
