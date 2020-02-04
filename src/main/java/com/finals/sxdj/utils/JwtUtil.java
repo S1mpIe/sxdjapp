@@ -25,7 +25,7 @@ public class JwtUtil {
             header.put("alg","HS256");
             return JWT.create()
                     .withHeader(header)
-                    .withClaim("status",openId)
+                    .withClaim("openId",openId)
                     .sign(algorithm);
         }catch (Exception e){
             return null;

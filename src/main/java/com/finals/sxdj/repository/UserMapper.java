@@ -7,4 +7,5 @@ import org.springframework.stereotype.Component;
 public interface UserMapper {
     User queryUser(String openId);
     int insertNewUser(User user);
+    int updateUser(User user,String openId);
 }

@@ -15,7 +15,7 @@
     </insert>
 
     <update id="updatePointStatus" parameterType="String">
-        update extract_point set status=${status} where id=${pointId};
+        update extract_point set status=#{status} where id=#{pointId};
     </update>
 
 

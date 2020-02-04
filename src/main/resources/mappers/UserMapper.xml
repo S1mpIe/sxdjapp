@@ -6,4 +6,7 @@
     <select id="queryUser" parameterType="String" resultMap="User">
         select * from user where open_id=#{openId};
     </select>
+    <update id="updateUser">
+        update user set name=#{user.name},real_name=#{user.realName},phone_number=#{user.phoneNumber},sex=#{user.sex},address=#{user.address} where open_id =#{openId};
+    </update>
 </mapper>
