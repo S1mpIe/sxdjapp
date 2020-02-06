@@ -12,6 +12,7 @@ import lombok.ToString;
 @ToString
 public class GoodsData {
     private String id;
+    private String name;
     private String imageUrl;
     private String number;
     private String numberUnit;

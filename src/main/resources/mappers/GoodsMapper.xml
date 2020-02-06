@@ -6,6 +6,7 @@
     <select id="queryGoodsByRecommend" resultMap="GoodsData" parameterType="int">
         select g.id as id,
                g.image_address as imageUrl,
+               g.name as name,
                g.category as category,
                f.name as origin,
                (gn.number-gn.sale_number) as number,
@@ -23,6 +24,7 @@
     <select id="queryGoodsByCategory" resultMap="GoodsData" parameterType="String">
         select g.id as id,
                g.image_address as imageUrl,
+               g.name as name,
                g.category as category,
                f.name as origin,
                (gn.number-gn.sale_number) as number,

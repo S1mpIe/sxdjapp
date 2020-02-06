@@ -1,5 +1,6 @@
 package com.finals.sxdj.repository;
 
+import com.finals.sxdj.model.GoodsData;
 import com.finals.sxdj.model.sqlmodel.Farmers;
 import org.springframework.stereotype.Component;
 
@@ -13,4 +14,7 @@ public interface FarmerMapper {
      * @return
      */
     Farmers[] queryAllFarmers();
+    GoodsData[] queryAllSold(int farmerId);
+    int insertVerifiedFarmer(String name,String openId,String introduce);
+    int insertNewGoods(GoodsData[] goods,int farmerId);
 }
