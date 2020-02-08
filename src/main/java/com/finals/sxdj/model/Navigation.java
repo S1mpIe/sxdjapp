@@ -1,8 +1,6 @@
 package com.finals.sxdj.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * @author S1mpIe
@@ -10,6 +8,8 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Navigation {
     private String articleId;
     private String articleImageUrl;

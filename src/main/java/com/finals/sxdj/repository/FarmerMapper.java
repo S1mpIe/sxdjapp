@@ -15,6 +15,6 @@ public interface FarmerMapper {
      */
     Farmers[] queryAllFarmers();
     GoodsData[] queryAllSold(int farmerId);
-    int insertVerifiedFarmer(String name,String openId,String introduce);
+    int insertVerifiedFarmer(String openId,String name,String introduce);
     int insertNewGoods(GoodsData[] goods,int farmerId);
 }

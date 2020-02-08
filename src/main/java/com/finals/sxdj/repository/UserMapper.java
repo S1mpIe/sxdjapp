@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public interface UserMapper {
     User queryUser(String openId);
+    User[] queryTeammates(String openId);
     int insertNewUser(User user);
     int updateUser(User user,String openId);
 }

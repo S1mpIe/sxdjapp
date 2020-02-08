@@ -22,4 +22,12 @@ public class UserServiceImpl implements UserService {
         }
         return jsonObject;
     }
+
+    @Override
+    public JSONObject getTeammates(String openId) {
+        User[] users = userMapper.queryTeammates(openId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("teammates",users);
+        return jsonObject;
+    }
 }

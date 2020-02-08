@@ -19,20 +19,20 @@ public class FarmerController {
     private FarmerService farmerService;
     @PutMapping("/farmer")
     @ResponseBody
-    public String applyFamer(HttpServletRequest request,@RequestParam("name") String name, @RequestParam("introduce")String introduce){
+    public JSONObject applyFamer(HttpServletRequest request,@RequestParam("name") String name, @RequestParam("introduce")String introduce){
         JSONObject accessToken = JwtUtil.getPayLoad(request.getHeader("accessToken"));
-        return farmerService.applyFarmer(accessToken.getString("openId"),name,introduce).toJSONString();
+        return farmerService.applyFarmer(accessToken.getString("openId"),name,introduce);
     }
 
     @GetMapping("/farmer/goods")
     @ResponseBody
-    public String getAllGoods(int farmerId){
-        return farmerService.queryAllSold(farmerId).toJSONString();
+    public JSONObject getAllGoods(@RequestParam("farmerId")int farmerId){
+        return farmerService.queryAllSold(farmerId);
     }
 
     @PutMapping("/farmer/goods")
     @ResponseBody
-    public String insertNewGoods(int farmerId,GoodsData[] goods){
-        return farmerService.applyGoods(goods,farmerId).toJSONString();
+    public JSONObject insertNewGoods(@RequestParam("farmerId")int farmerId,@RequestParam("goods")GoodsData[] goods){
+        return farmerService.applyGoods(goods,farmerId);
     }
 }

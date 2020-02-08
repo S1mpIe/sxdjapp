@@ -9,7 +9,10 @@
     <select id="queryAllFarmers" resultMap="Farmer" >
         select * from farmers
     </select>
-    <select id="queryAllSold" resultMap="GoodsData">
+    <insert id="insertVerifiedFarmer" >
+        insert into farmers (open_id,name,introduce,status) values (#{openId},#{name},#{introduce},'待审核')
+    </insert>
+    <select id="queryAllSold" resultMap="Goods">
         select g.id as id,
                g.image_address as imageUrl,
                g.name as name,
@@ -23,6 +26,6 @@
                  left join farmers f on f.id=g.origin_id
                  left join goods_number gn on gn.goods_id=g.id
                  left join goods_price gp on gp.goods_id=g.id
-        where f.id=#{farmerId} and rg.if_on=1 and g.if_delete=0
+        where f.id=#{farmerId} and g.if_delete=0
     </select>
 </mapper>

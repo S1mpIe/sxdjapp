@@ -1,5 +1,6 @@
 package com.finals.sxdj.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.finals.sxdj.model.sqlmodel.User;
 import com.finals.sxdj.services.InitService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +22,12 @@ public class InitController {
 
     @ResponseBody
     @RequestMapping(value = "/login",method = RequestMethod.PUT)
-    public String getLogin(@Param("code") String code){
-        return initService.login(code).toJSONString();
+    public JSONObject getLogin(@Param("code") String code){
+        return initService.login(code);
     }
     @ResponseBody
     @RequestMapping(value = "/register",method = RequestMethod.PUT)
-    public String registerUser(User user){
-        return initService.register(user).toJSONString();
+    public JSONObject registerUser(User user){
+        return initService.register(user);
     }
 }

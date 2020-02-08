@@ -14,6 +14,7 @@ public class FarmerServiceImpl implements FarmerService {
 
     @Override
     public JSONObject applyFarmer(String openId, String name, String introduce) {
+        System.out.println(name + "-" + introduce + "-" + openId);
         int i = farmerMapper.insertVerifiedFarmer(openId, name, introduce);
         JSONObject jsonObject = new JSONObject();
         if(i == 1){
