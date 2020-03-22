@@ -11,15 +11,25 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
+
     @Override
-    public JSONObject updateUser(User user, String openId) {
-        int i = userMapper.updateUser(user, openId);
+    public JSONObject updateUser(String cate, String value, String openId) {
+        int i = userMapper.updateUser(cate, value, openId);
         JSONObject jsonObject = new JSONObject();
         if(i == 1){
             jsonObject.put("status","success");
         }else {
             jsonObject.put("status","failed");
         }
+        return jsonObject;
+    }
+
+    @Override
+    public JSONObject getPersonData(String openId) {
+        System.out.println(openId);
+        User user = userMapper.queryUser(openId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("user",user);
         return jsonObject;
     }
 

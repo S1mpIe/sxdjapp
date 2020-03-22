@@ -19,9 +19,14 @@ public class FarmerController {
     private FarmerService farmerService;
     @PutMapping("/farmer")
     @ResponseBody
-    public JSONObject applyFamer(HttpServletRequest request,@RequestParam("name") String name, @RequestParam("introduce")String introduce){
+    public JSONObject applyFarmer(HttpServletRequest request,@RequestParam("name") String name, @RequestParam("introduce")String introduce){
         JSONObject accessToken = JwtUtil.getPayLoad(request.getHeader("accessToken"));
         return farmerService.applyFarmer(accessToken.getString("openId"),name,introduce);
+    }
+    @GetMapping("/farmer")
+    @ResponseBody
+    public JSONObject getPersonFarmer(HttpServletRequest request){
+        return farmerService.queryFarmer(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
     }
 
     @GetMapping("/farmer/goods")

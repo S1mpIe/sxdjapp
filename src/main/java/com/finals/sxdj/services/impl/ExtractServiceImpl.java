@@ -25,6 +25,14 @@ public class ExtractServiceImpl implements ExtractService {
     }
 
     @Override
+    public JSONObject getNearbyPoint(double latitude, double longitude) {
+        ExtractPoint[] extractPoints = extractMapper.queryAllActivePoint(latitude, longitude, 8);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("points",extractPoints);
+        return jsonObject;
+    }
+
+    @Override
     public JSONObject getAllAuditedPoint() {
         ExtractPoint[] extractPoints = extractMapper.queryAllPoint("已通过");
         JSONObject jsonObject = new JSONObject();

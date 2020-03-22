@@ -6,10 +6,7 @@
     <select id="queryUser" parameterType="String" resultMap="User">
         select * from user where open_id=#{openId};
     </select>
-    <select id="queryTeammates" resultMap="User">
-        select u.* from user u left join order_team ot on u.open_id = ot.open_id where u.open_id=#{openId}
-    </select>
     <update id="updateUser">
-        update user set name=#{user.name},real_name=#{user.realName},phone_number=#{user.phoneNumber},sex=#{user.sex},address=#{user.address} where open_id =#{openId};
+        update user set ${cate}=#{value} where open_id=#{openId}
     </update>
 </mapper>

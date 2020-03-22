@@ -5,6 +5,7 @@ import com.finals.sxdj.model.sqlmodel.ExtractPoint;
 
 public interface ExtractService {
     JSONObject insertNewAuditedPoint(ExtractPoint point);
+    JSONObject getNearbyPoint(double latitude,double longitude);
     JSONObject getAllAuditedPoint();
     JSONObject updatePointStatus(int pointId,String status);
 }

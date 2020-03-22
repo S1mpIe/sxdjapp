@@ -15,4 +15,8 @@ public interface GoodsMapper {
      */
     GoodsData[] queryGoodsByRecommend(int recommendId);
     GoodsData[] queryGoodsByCategory(String category);
+    GoodsData queryGoodsById(int id);
+    void updateGoodsNumber(int id,int number);
+    void updateGoodsSaleNumber(int id,int saleNumber);
+    void increaseSaleNumber(int id,int saleNumber);
 }

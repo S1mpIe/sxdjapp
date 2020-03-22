@@ -2,6 +2,7 @@ package com.finals.sxdj.services.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.finals.sxdj.model.GoodsData;
+import com.finals.sxdj.model.sqlmodel.Farmers;
 import com.finals.sxdj.repository.FarmerMapper;
 import com.finals.sxdj.services.FarmerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,24 @@ public class FarmerServiceImpl implements FarmerService {
         GoodsData[] goodsData = farmerMapper.queryAllSold(farmerId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("goods",goodsData);
+        return jsonObject;
+    }
+
+    @Override
+    public JSONObject queryFarmer(String openId) {
+        Farmers farmers = farmerMapper.queryFarmer(openId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("status","failed");
+        if(farmers != null){
+            if (farmers.getStatus().equals("待审核")){
+                jsonObject.put("msg","未审核");
+            }else {
+                jsonObject.put("status", "success");
+                jsonObject.put("farmer",farmers);
+            }
+        }else {
+            jsonObject.put("msg","尚未注册");
+        }
         return jsonObject;
     }
 }

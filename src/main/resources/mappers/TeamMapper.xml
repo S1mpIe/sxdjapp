@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finals.sxdj.repository.TeamMapper">
+    <resultMap id="Teams" type="Team" autoMapping="true">
+        <id column="id" property="id"/>
+        <result column="teamName" property="name"/>
+        <collection property="mates" javaType="java.util.List" ofType="User" autoMapping="true"/>
+    </resultMap>
+    <insert id="insertNewTeam" >
+        insert into teams (name) values (#{name})
+    </insert>
+    <insert id="insertNewTeammates">
+        insert into teammates (id, open_id, status) VALUES (#{teamId},#{mateId},#{status});
+    </insert>
+    <select id="queryMateTeam" resultMap="Teams">
+        select t.id as id,
+               t.name as teamName,
+               u.name as name,
+               u.address as address,
+               u.phone_number as phoneNumber,
+               u.real_name as realName,
+               u.image_address as imageAddress,
+               u.sex as sex,
+               u.user_cate as userCate
+        from (select t1.id
+              from teams t1
+                       left join teammates tm1 on t1.id=tm1.id
+                       left join user u1 on tm1.open_id = u1.open_id
+              where u1.open_id=#{mateId}) temp
+            left join teams t on temp.id = t.id
+            left join teammates tm on t.id=tm.id
+            left join user u on tm.open_id = u.open_id
+    </select>
+    <select id="queryTeamByName" resultMap="Teams">
+        select t.id as id,
+               t.name as teamName,
+               u.name as name,
+               u.address as address,
+               u.phone_number as phoneNumber,
+               u.real_name as realName,
+               u.image_address as imageAddress,
+               u.sex as sex,
+               u.user_cate as userCate
+        from teams t
+                 left join teammates tm on t.id=tm.id
+                 left join user u on tm.open_id = u.open_id
+        where t.name=#{name}
+    </select>
+</mapper>

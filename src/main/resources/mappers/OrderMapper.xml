@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.finals.sxdj.repository.OrderMapper">
+    <resultMap id="Order" type="Order" autoMapping="true"/>
+    <resultMap id="OrderData" type="OrderData" autoMapping="true"/>
+    <insert id="insertNewOrder" >
+        insert into `order` (consumer_id,put_time,status,pay) VALUES (#{consumerId},#{putTime},'处理中',#{pay});
+    </insert>
+    <insert id="insertNewOrderData">
+        insert into order_data (order_id, goods_id, goods_number,goods_price,goods_total_price) VALUES (#{orderId},#{goodsId},#{number},#{price},#{totalPrice})
+    </insert>
+    <update id="updateOrder">
+        update `order` set ${cate}=#{value} where id=#{id}
+    </update>
+    <select id="queryOrderById" resultMap="Order">
+        select * from `order` where id=#{orderId}
+    </select>
+    <select id="queryOrdersByConsumer" resultMap="Order">
+        select * from `order` where consumer_id=#{consumberId}
+    </select>
+    <select id="queryLastOrder" resultMap="Order">
+        select * from `order` order by id desc limit 1
+    </select>
+    <select id="queryById" resultMap="OrderData">
+        select * from order_data where order_id=#{orderId}
+    </select>
+</mapper>

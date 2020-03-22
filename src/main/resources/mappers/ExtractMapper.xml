@@ -18,5 +18,8 @@
         update extract_point set status=#{status} where id=#{pointId};
     </update>
 
+    <select id="queryAllActivePoint" resultMap="ExtractPoints">
+        select * from extract_point where (latitude - #{latitude}) &lt; #{disparity} and (longitude - #{latitude}) &lt; #{disparity};
+    </select>
 
 </mapper>

@@ -16,4 +16,5 @@ public class Farmers {
     private String name;
     private String introduce;
     private String imageAddress;
+    private String status;
 }

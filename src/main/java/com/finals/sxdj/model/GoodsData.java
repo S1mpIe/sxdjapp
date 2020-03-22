@@ -11,13 +11,13 @@ import lombok.ToString;
 @Getter
 @ToString
 public class GoodsData {
-    private String id;
+    private int id;
     private String name;
     private String imageUrl;
-    private String number;
+    private int number;
     private String numberUnit;
     private String origin;
     private String category;
-    private String price;
+    private double price;
     private String priceUnit;
 }
