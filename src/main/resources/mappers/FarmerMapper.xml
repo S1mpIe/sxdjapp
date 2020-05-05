@@ -12,6 +12,9 @@
     <select id="queryFarmer" resultMap="Farmer">
         select * from farmers where open_id=#{openId};
     </select>
+    <select id="queryFarmerById" resultMap="Farmer">
+        select * from farmers where id=#{farmerId}
+    </select>
     <insert id="insertVerifiedFarmer" >
         insert into farmers (open_id,name,introduce,status) values (#{openId},#{name},#{introduce},'待审核')
     </insert>

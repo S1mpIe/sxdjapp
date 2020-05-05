@@ -1,10 +1,10 @@
 package com.finals.sxdj.services.impl;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.finals.sxdj.model.Navigation;
 import com.finals.sxdj.model.sqlmodel.Farmers;
 import com.finals.sxdj.repository.FarmerMapper;
 import com.finals.sxdj.repository.GoodsMapper;
+import com.finals.sxdj.repository.NavigationMapper;
 import com.finals.sxdj.repository.RecommendMapper;
 import com.finals.sxdj.services.HomeService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,20 +27,13 @@ public class HomeServiceImpl implements HomeService {
     private GoodsMapper goodsMapper;
     @Autowired
     private FarmerMapper farmerMapper;
+    @Autowired
+    private NavigationMapper navigationMapper;
     @Override
     public String getNavigation() {
-        ListOperations listOperations = redisTemplate.opsForList();
-        Long len = listOperations.size("navigation");
-        if(len == 0){
-            throw new RuntimeException("导航栏为空");
-        }
-        List navigations = listOperations.range("navigation", 0, len);
-        ArrayList<Navigation> navigationArrayList = new ArrayList<>();
-        for(int i = 0;i < len;i++){
-            HashMap o = (HashMap) navigations.get(i);
-            navigationArrayList.add(new Navigation((String) o.get("articleId"),(String)o.get("articleImageUrl")));
-        }
-        return JSONObject.toJSONString(navigationArrayList);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("navigations",navigationMapper.queryAllNavigation());
+        return jsonObject.toJSONString();
     }
 
     @Override

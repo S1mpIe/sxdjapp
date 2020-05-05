@@ -37,4 +37,19 @@ public class OrderController {
         return orderService.getOrderPay(orderMap);
     }
 
+    @PostMapping("/shoppingCart")
+    @ResponseBody
+    public JSONObject putNewGoods(HttpServletRequest request,@RequestParam("id")int id,@RequestParam("number")int number){
+        return orderService.putGoods(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),id,number);
+    }
+    @GetMapping("/shoppingCart")
+    @ResponseBody
+    public JSONObject getShoppingCart(HttpServletRequest request){
+        return orderService.getPersonShoppingCart(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
+    }
+    @DeleteMapping("/shoppingCart")
+    @ResponseBody
+    public JSONObject deleteShoppingCart(HttpServletRequest request,@RequestParam("id")int id){
+        return orderService.deleteShoppingCart(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),id);
+    }
 }

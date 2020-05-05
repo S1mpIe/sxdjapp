@@ -1,12 +1,10 @@
 package com.finals.sxdj.controller;
+import com.alibaba.fastjson.JSONObject;
 import com.finals.sxdj.services.HomeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author S1mpIe
@@ -32,7 +30,7 @@ public class HomeController {
 
     @RequestMapping(value = "/recommendGoods",method = RequestMethod.GET)
     @ResponseBody
-    public String getRecommendGoods(@RequestParam(value = "recommendId")int id){
+    public String getRecommendGoods(@RequestParam("recommendId")int id){
         return homeService.getRecommendGoods(id);
     }
 
@@ -44,7 +42,7 @@ public class HomeController {
 
     @RequestMapping(value = "/categoryGoods",method = RequestMethod.GET)
     @ResponseBody
-    public String getGoodsByCate(@RequestParam(value = "category")String cate){
+    public String getGoodsByCate(@RequestParam("category") String cate){
         String categoryGoods = homeService.getCategoryGoods(cate);
         log.info(categoryGoods + "-category-" + cate);
         return categoryGoods;

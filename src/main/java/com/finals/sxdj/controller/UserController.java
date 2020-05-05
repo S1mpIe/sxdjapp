@@ -7,10 +7,7 @@ import com.finals.sxdj.services.UserService;
 import com.finals.sxdj.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -35,4 +32,11 @@ public class UserController {
     public JSONObject getPersonData(HttpServletRequest request){
         return userService.getPersonData(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
     }
+
+    @GetMapping("/account")
+    @ResponseBody
+    public JSONObject getPersonAccout(HttpServletRequest request){
+        return userService.getAccount(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
+    }
+
 }

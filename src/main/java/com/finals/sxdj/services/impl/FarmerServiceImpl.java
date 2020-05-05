@@ -1,5 +1,6 @@
 package com.finals.sxdj.services.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.finals.sxdj.model.GoodsData;
 import com.finals.sxdj.model.sqlmodel.Farmers;
@@ -62,6 +63,15 @@ public class FarmerServiceImpl implements FarmerService {
         }else {
             jsonObject.put("msg","尚未注册");
         }
+        return jsonObject;
+    }
+
+    @Override
+    public JSONObject queryFarmerById(int farmerId) {
+        Farmers farmers = farmerMapper.queryFarmerById(farmerId);
+        farmers.setOpenId(null);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("farmer",farmers);
         return jsonObject;
     }
 }

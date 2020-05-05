@@ -11,7 +11,7 @@
     <groupId>com.finals</groupId>
     <artifactId>sxdj</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>sxdj</name>
+
     <description>Demo project for Spring Boot</description>
     <packaging>war</packaging>
     <properties>
@@ -118,6 +118,7 @@
     </dependencies>
 
     <build>
+        <finalName>sxdj</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

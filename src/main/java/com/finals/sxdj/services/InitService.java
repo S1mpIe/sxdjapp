@@ -8,5 +8,5 @@ import com.finals.sxdj.model.sqlmodel.User;
  */
 public interface InitService {
     JSONObject login(String code);
-    JSONObject register(User user);
+    JSONObject register(String openId,User user);
 }

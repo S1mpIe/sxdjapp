@@ -3,9 +3,16 @@
 
 <mapper namespace="com.finals.sxdj.repository.UserMapper">
     <resultMap id="User" type="User" autoMapping="true"/>
+    <resultMap id="Account" type="Account" autoMapping="true"/>
     <select id="queryUser" parameterType="String" resultMap="User">
         select * from user where open_id=#{openId};
     </select>
+    <select id="queryCount" parameterType="String" resultMap="Account">
+        select balance from account where open_id=#{openId};
+    </select>
+    <insert id="insertNewAccount" parameterType="String">
+        insert into account (open_id, balance) VALUES (#{openId},0);
+    </insert>
     <update id="updateUser">
         update user set ${cate}=#{value} where open_id=#{openId}
     </update>

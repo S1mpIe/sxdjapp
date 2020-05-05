@@ -38,7 +38,6 @@ public class InitServiceImpl implements InitService {
         attributes.put("secret",secret);
         attributes.put("grant_type","authorization_code");
         JSONObject httpJsonObject = HttpUtil.sendGetRequest(heads, attributes, loginUrl);
-        System.out.println(httpJsonObject.toJSONString());
         String openId = (String) httpJsonObject.get("openid");
         JSONObject jsonObject = new JSONObject();
         if(openId == null){
@@ -46,26 +45,30 @@ public class InitServiceImpl implements InitService {
             jsonObject.put("errMsg","invalid code");
         }else {
             User user = userMapper.queryUser(openId);
-            user.setOpenId(null);
             if(user == null){
-                jsonObject.put("errId",1);
-                jsonObject.put("errMsg","user not registered");
-            }else {
-                jsonObject.put("user",user);
-                redisTemplate.opsForHash().put("session_keys",openId,(String)httpJsonObject.get("session_key"));
-                String token = JwtUtil.getToken(openId);
-                jsonObject.put("accessToken",token);
+                userMapper.insertNewAccount(openId);
             }
+//            else {
+//                user.setOpenId(null);
+//                jsonObject.put("user",user);
+//
+//            }
+            jsonObject.put("status","success");
+            redisTemplate.opsForHash().put("session_keys",openId,(String)httpJsonObject.get("session_key"));
+            String token = JwtUtil.getToken(openId);
+            jsonObject.put("accessToken",token);
         }
+
         return jsonObject;
     }
 
     @Override
-    public JSONObject register(User user) {
+    public JSONObject register(String openId,User user) {
         int rows = userMapper.insertNewUser(user);
         JSONObject jsonObject = new JSONObject();
         if (rows == 1) {
             jsonObject.put("isLogin",true);
+            userMapper.insertNewAccount(openId);
         } else {
             jsonObject.put("isLogin",false);
             jsonObject.put("errMsg","information invalid");

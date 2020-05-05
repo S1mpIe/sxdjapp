@@ -1,6 +1,7 @@
 package com.finals.sxdj.services.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.finals.sxdj.model.Account;
 import com.finals.sxdj.model.sqlmodel.User;
 import com.finals.sxdj.repository.UserMapper;
 import com.finals.sxdj.services.UserService;
@@ -30,6 +31,22 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.queryUser(openId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("user",user);
+        return jsonObject;
+    }
+
+    @Override
+    public JSONObject getAccount(String openId) {
+        Account account = userMapper.queryCount(openId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("account",account.getBalance());
+        return jsonObject;
+    }
+
+    @Override
+    public JSONObject addNewAccount(String openId) {
+        userMapper.insertNewAccount(openId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("status","success");
         return jsonObject;
     }
 

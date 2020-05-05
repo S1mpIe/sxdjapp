@@ -12,7 +12,9 @@
                (gn.number-gn.sale_number) as number,
                gn.unit as numberUnit,
                gp.number as price,
-               gp.unti as priceUnit
+               gp.unti as priceUnit,
+               gn.sale_number as soldNumber,
+               g.origin_id as orginId
         from recommend_goods rg
                  left join goods g on g.id=rg.goods_id
                  left join farmers f on f.id=g.origin_id
@@ -30,7 +32,9 @@
                (gn.number-gn.sale_number) as number,
                gn.unit as numberUnit,
                gp.number as price,
-               gp.unti as priceUnit
+               gp.unti as priceUnit,
+               gn.sale_number as soldNumber,
+               g.origin_id as orginId
         from goods g
                  left join farmers f on f.id=g.origin_id
                  left join goods_number gn on gn.goods_id=g.id
@@ -46,7 +50,9 @@
                (gn.number-gn.sale_number) as number,
                gn.unit as numberUnit,
                gp.number as price,
-               gp.unti as priceUnit
+               gp.unti as priceUnit,
+               gn.sale_number as soldNumber,
+               g.origin_id as orginId
         from goods g
                  left join farmers f on f.id=g.origin_id
                  left join goods_number gn on gn.goods_id=g.id

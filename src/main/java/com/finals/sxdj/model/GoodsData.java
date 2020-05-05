@@ -16,8 +16,11 @@ public class GoodsData {
     private String imageUrl;
     private int number;
     private String numberUnit;
+    private int soldNumber;
     private String origin;
+    private int originId;
     private String category;
     private double price;
     private String priceUnit;
+    private int selectNumber;
 }

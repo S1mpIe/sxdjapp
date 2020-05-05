@@ -21,12 +21,16 @@ public class JwtFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        String accessHeader = request.getHeader("accessToken");
-        if (JwtUtil.verify(accessHeader) || request.getServletPath().endsWith("/login") || request.getServletPath().endsWith("/register")){
+        if (!request.getRequestURI().endsWith(".jpg") && !request.getRequestURI().endsWith(".md") && !request.getRequestURI().endsWith(".png")) {
+            String accessHeader = request.getHeader("accessToken");
+            if (JwtUtil.verify(accessHeader) || request.getServletPath().endsWith("/login") || request.getServletPath().endsWith("/register")){
+                filterChain.doFilter(servletRequest,servletResponse);
+            }else{
+                HttpServletResponse response = (HttpServletResponse) servletResponse;
+                response.sendError(404,"您需要登录！");
+            }
+        } else {
             filterChain.doFilter(servletRequest,servletResponse);
-        }else{
-            HttpServletResponse response = (HttpServletResponse) servletResponse;
-            response.sendError(404,"您需要登录！");
         }
     }
 
