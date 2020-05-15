@@ -22,7 +22,6 @@
                  left join goods_price gp on gp.goods_id=g.id
         where rg.recommend_id=#{recommendId} and rg.if_on=1 and g.if_delete=0
     </select>
-
     <select id="queryGoodsByCategory" resultMap="GoodsData" parameterType="String">
         select g.id as id,
                g.image_address as imageUrl,
@@ -43,21 +42,21 @@
     </select>
     <select id="queryGoodsById" resultMap="GoodsData">
         select g.id as id,
-               g.image_address as imageUrl,
-               g.name as name,
-               g.category as category,
-               f.name as origin,
-               (gn.number-gn.sale_number) as number,
-               gn.unit as numberUnit,
-               gp.number as price,
-               gp.unti as priceUnit,
-               gn.sale_number as soldNumber,
-               g.origin_id as orginId
-        from goods g
-                 left join farmers f on f.id=g.origin_id
-                 left join goods_number gn on gn.goods_id=g.id
-                 left join goods_price gp on gp.goods_id=g.id
-        where g.id=#{id} and g.if_delete=0;
+              g.image_address as imageUrl,
+              g.name as name,
+              g.category as category,
+              f.name as origin,
+              (gn.number-gn.sale_number) as number,
+              gn.unit as numberUnit,
+              gp.number as price,
+              gp.unti as priceUnit,
+              gn.sale_number as soldNumber,
+              g.origin_id as orginId
+       from goods g
+                left join farmers f on f.id=g.origin_id
+                left join goods_number gn on gn.goods_id=g.id
+                left join goods_price gp on gp.goods_id=g.id
+       where g.id=#{id} and g.if_delete=0
     </select>
     <update id="increaseSaleNumber">
         update goods_number set sale_number=(sale_number+#{saleNumber}) where goods_id=#{id}

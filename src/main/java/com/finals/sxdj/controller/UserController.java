@@ -35,8 +35,13 @@ public class UserController {
 
     @GetMapping("/account")
     @ResponseBody
-    public JSONObject getPersonAccout(HttpServletRequest request){
+    public JSONObject getPersonAccount(HttpServletRequest request){
         return userService.getAccount(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
     }
 
+    @GetMapping("/account/detail")
+    @ResponseBody
+    public JSONObject getAccountDetail(HttpServletRequest request){
+        return userService.getAccountDetail(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
+    }
 }

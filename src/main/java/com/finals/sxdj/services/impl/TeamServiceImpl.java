@@ -36,7 +36,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public JSONObject getTeamRecords(int teamId) {
-        Order[] orders = orderMapper.queryOrdersByConsumer("team-" + teamId);
+        Order[] orders = orderMapper.queryOrdersByConsumer("team-" + teamId,"*");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("orders",orders);
         return jsonObject;

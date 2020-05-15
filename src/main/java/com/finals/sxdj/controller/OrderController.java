@@ -1,6 +1,8 @@
 package com.finals.sxdj.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.finals.sxdj.model.sqlmodel.ShoppingAddress;
 import com.finals.sxdj.repository.OrderMapper;
 import com.finals.sxdj.services.OrderService;
 import com.finals.sxdj.utils.JwtUtil;
@@ -21,20 +23,19 @@ public class OrderController {
 
     @PutMapping(value = "/order")
     @ResponseBody
-    public JSONObject putNewOrder(@RequestBody Map orderMap, HttpServletRequest request){
-        return orderService.applyNewOrder(orderMap, JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
+    public JSONObject putNewOrder(@RequestBody String body, HttpServletRequest request){
+        return orderService.applyNewOrder(body, JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
     }
 
+    @PostMapping("/order")
+    @ResponseBody
+    public JSONObject receiveGoods(@RequestParam("orderId")int orderId,HttpServletRequest request){
+        return orderService.receiveGoods(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),orderId);
+    }
     @GetMapping("/order")
     @ResponseBody
-    public JSONObject getPersonOrder(HttpServletRequest request){
-        return orderService.getPersonOrders(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
-    }
-
-    @GetMapping("/orderPay")
-    @ResponseBody
-    public JSONObject getOrderPay(@RequestBody Map orderMap){
-        return orderService.getOrderPay(orderMap);
+    public JSONObject getPersonOrder(HttpServletRequest request,@RequestParam("status")String status){
+        return orderService.getPersonOrders(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),status);
     }
 
     @PostMapping("/shoppingCart")
@@ -51,5 +52,17 @@ public class OrderController {
     @ResponseBody
     public JSONObject deleteShoppingCart(HttpServletRequest request,@RequestParam("id")int id){
         return orderService.deleteShoppingCart(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),id);
+    }
+
+    @GetMapping("/shoppingAddress")
+    @ResponseBody
+    public JSONObject getAllShoppingAddress(HttpServletRequest request){
+        return orderService.getShoppingAddress(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
+    }
+
+    @PutMapping("/shoppingAddress")
+    @ResponseBody
+    public JSONObject addNewShoppingAddress(HttpServletRequest request, @RequestParam("pointId")int pointId,@RequestParam("name")String name,@RequestParam("phoneNumber")long number){
+        return orderService.addShoppingAddress(name,pointId,number,JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
     }
 }

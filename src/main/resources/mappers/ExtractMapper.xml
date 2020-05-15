@@ -9,12 +9,20 @@
         where status like ${status};
     </select>
 
-    <insert id="insertNewPoint" parameterType="ExtractPoint">
-        insert into extract_point (name,id_number, occupation, phone_number, address, area, advantage, status)
-        values (#{name},#{idNumber},#{occupation},#{phoneNumber},#{address},#{area},#{advantage},'待审核')
+    <insert id="insertNewPoint">
+        insert into extract_point (owner,open_id,id_number,name, phone_number, address, area, status)
+        values (#{point.owner},
+                #{openId},
+                #{point.idNumber},
+                #{point.name},
+                #{point.phoneNumber},
+                #{point.address},
+                #{point.area},'待审核')
     </insert>
-
-    <update id="updatePointStatus" parameterType="String">
+    <select id="queryPersonPoint" resultMap="ExtractPoints">
+        select * from extract_point where open_id=#{openId}
+    </select>
+    <update id="updatePointStatus" >
         update extract_point set status=#{status} where id=#{pointId};
     </update>
 

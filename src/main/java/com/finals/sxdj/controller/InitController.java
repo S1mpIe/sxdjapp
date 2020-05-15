@@ -24,12 +24,13 @@ public class InitController {
     @ResponseBody
     @RequestMapping(value = "/login",method = RequestMethod.PUT)
     public JSONObject getLogin(@RequestBody String body){
+        System.out.println(body);
         JSONObject jsonObject = JSONObject.parseObject(body);
         return initService.login(jsonObject.getString("code"));
     }
-    @ResponseBody
-    @RequestMapping(value = "/register",method = RequestMethod.PUT)
-    public JSONObject registerUser(HttpServletRequest request, @RequestBody User user){
-        return initService.register(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),user);
-    }
+//    @ResponseBody
+//    @RequestMapping(value = "/register",method = RequestMethod.PUT)
+//    public JSONObject registerUser(HttpServletRequest request, @RequestBody User user){
+//        return initService.register(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),user);
+//    }
 }

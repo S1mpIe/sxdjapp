@@ -4,16 +4,30 @@
 <mapper namespace="com.finals.sxdj.repository.UserMapper">
     <resultMap id="User" type="User" autoMapping="true"/>
     <resultMap id="Account" type="Account" autoMapping="true"/>
+    <resultMap id="AccountDetail" type="AccountDetail" autoMapping="true"/>
     <select id="queryUser" parameterType="String" resultMap="User">
         select * from user where open_id=#{openId};
     </select>
     <select id="queryCount" parameterType="String" resultMap="Account">
-        select balance from account where open_id=#{openId};
+        select balance from account where open_id=#{consumerId};
     </select>
+    <select id="queryAccountDetail" resultMap="AccountDetail">
+        select * from account_detailed where consumer_id=#{consumerId}
+    </select>
+    <insert id="insertNewUser" >
+        insert into user (open_id,user_cate) VALUES
+                        (#{openId},'个人用户');
+    </insert>
     <insert id="insertNewAccount" parameterType="String">
-        insert into account (open_id, balance) VALUES (#{openId},0);
+        insert into account (open_id, balance) VALUES (#{consumerId},10000);
+    </insert>
+    <insert id="insertNewAccountDetail">
+        insert into account_detailed (consumer_id, `change`, cause, source, time) VALUES (#{consumerId},#{change},#{cause},#{source},#{time})
     </insert>
     <update id="updateUser">
         update user set ${cate}=#{value} where open_id=#{openId}
+    </update>
+    <update id="updateUserBalance">
+        update account set balance=#{balance} where open_id=#{consumerId}
     </update>
 </mapper>

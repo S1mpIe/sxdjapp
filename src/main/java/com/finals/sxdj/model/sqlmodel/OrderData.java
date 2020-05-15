@@ -10,9 +10,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderData {
+    private String name;
     private int orderId;
     private int goodsId;
     private int goodsNumber;
+    private String imageUrl;
     private double goodsPrice;
     private double goodsTotalPrice;
+    private String origin;
+    private int originId;
 }

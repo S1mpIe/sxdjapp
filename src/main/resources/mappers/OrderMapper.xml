@@ -1,17 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.finals.sxdj.repository.OrderMapper">
-    <resultMap id="Order" type="Order" autoMapping="true"/>
-    <resultMap id="OrderData" type="OrderData" autoMapping="true"/>
+    <resultMap id="Order" type="Order" autoMapping="true">
+        <id column="id" property="id"/>
+        <collection property="goods" javaType="List" ofType="com.finals.sxdj.model.sqlmodel.OrderData" autoMapping="true"/>
+    </resultMap>
+    <resultMap id="OrderData" type="OrderData" autoMapping="true">
+    </resultMap>
     <resultMap id="GoodsData" type="GoodsData" autoMapping="true"/>
+    <resultMap id="ShoppingAddress" type="ShoppingAddress">
+        <id column="saId" property="id"/>
+        <result column="saName" property="name"/>
+        <result column="saPhoneNumber" property="phoneNumber"/>
+        <result column="pointId" property="pointId"/>
+        <association property="point" javaType="com.finals.sxdj.model.sqlmodel.ExtractPoint" autoMapping="true"/>
+    </resultMap>
+    <resultMap id="CartGoods" type="CartGoods" >
+        <result column="goods_id" property="id"/>
+        <result column="goods_number" property="number"/>
+    </resultMap>
     <insert id="insertNewOrder" >
-        insert into `order` (consumer_id,put_time,status,pay) VALUES (#{consumerId},#{putTime},'处理中',#{pay});
+        insert into `order` (consumer_id,put_time,status,pay,address_id) VALUES (#{consumerId},#{putTime},'处理中',#{pay},#{addressId});
     </insert>
     <insert id="insertNewOrderData">
         insert into order_data (order_id, goods_id, goods_number,goods_price,goods_total_price) VALUES (#{orderId},#{goodsId},#{number},#{price},#{totalPrice})
     </insert>
     <insert id="insertToShoppingCart" >
         insert into shopping_cart (open_id, goods_id, goods_number) VALUES (#{openId},#{goodsId},#{number})
+    </insert>
+    <insert id="insertNewShoppingAddress">
+        insert into shopping_address (open_id, name, phone_number, extract_point) VALUES (#{openId},#{name},#{number},#{pointId})
     </insert>
     <update id="updateOrder">
         update `order` set ${cate}=#{value} where id=#{id}
@@ -23,7 +41,42 @@
         select * from `order` where id=#{orderId}
     </select>
     <select id="queryOrdersByConsumer" resultMap="Order">
-        select * from `order` where consumer_id=#{consumberId}
+        select
+            o.id, result_time, put_time, over_time,o. status, pay,
+            od.*,
+            g.image_address as imageUrl,
+            g.name as name,
+            sa.name as receiver,
+            f.id as originId,
+            f.name as origin,
+            ep.id as extractPoint,
+            ep.address as extractAddress
+        from `order` as o
+                 left join order_data od on o.id = od.order_id
+                 left join goods g on od.goods_id = g.id
+                 left join farmers f on f.id=g.origin_id
+                 left join shopping_address sa on sa.id=o.address_id
+                 left join extract_point ep on ep.id=sa.extract_point
+        where o.consumer_id=#{consumerId} and o.status like #{status}
+    </select>
+    <select id="queryOrdersByPoint" resultMap="Order">
+        select
+            o.id, result_time, put_time, over_time,o. status, pay,
+            od.*,
+            g.image_address as imageUrl,
+            g.name as name,
+            sa.name as receiver,
+            f.id as originId,
+            f.name as origin,
+            ep.id as extractPoint,
+            ep.address as extractAddress
+        from `order` as o
+                 left join order_data od on o.id = od.order_id
+                 left join goods g on od.goods_id = g.id
+                 left join farmers f on f.id=g.origin_id
+                 left join shopping_address sa on sa.id=o.address_id
+                 left join extract_point ep on ep.id=sa.extract_point
+        where o.address_id=#{pointId}
     </select>
     <select id="queryLastOrder" resultMap="Order">
         select * from `order` order by id desc limit 1
@@ -46,19 +99,22 @@
                  left join goods_number gn on sc.goods_id=gn.goods_id
                  left join goods_price gp on gp.goods_id=sc.goods_id
                  left join farmers f on f.id=g.origin_id
-        where sc.open_id=#{openId} and g.if_delete=0;
+        where sc.open_id=#{openId} and g.if_delete=0
     </select>
-    <select id="queryShoppingCartGoods" resultMap="GoodsData">
-        select g.id as id,
-               g.image_address as imageUrl,
-               g.name as name,
-               g.category as category,
-               f.name as origin,
-               sc.goods_number as selectNumber
+    <select id="queryShoppingCartGoods" resultMap="CartGoods">
+        select *
         from shopping_cart sc
-                 left join goods g on sc.goods_id=g.id
-                 left join farmers f on f.id=g.origin_id
-        where sc.open_id=#{openId} and g.if_delete=0 and sc.goods_id=#{goodsId};
+        where sc.open_id=#{openId} and sc.goods_id=#{goodsId};
+    </select>
+    <select id="queryAllShoppingAddress" resultMap="ShoppingAddress">
+        select sa.id as saId,
+               sa.name as saName,
+               sa.phone_number as saPhoneNumber,
+               sa.extract_point as pointId,
+               ep.*
+            from shopping_address sa
+            left join extract_point ep on ep.id=sa.extract_point
+            where sa.open_id=#{openId}
     </select>
     <delete id="deleteShoppingCartGoods">
         delete from shopping_cart where goods_id=#{goodsId} and open_id=#{openId}

@@ -2,6 +2,7 @@ package com.finals.sxdj.services.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.finals.sxdj.model.Account;
+import com.finals.sxdj.model.sqlmodel.AccountDetail;
 import com.finals.sxdj.model.sqlmodel.User;
 import com.finals.sxdj.repository.UserMapper;
 import com.finals.sxdj.services.UserService;
@@ -35,10 +36,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JSONObject getAccount(String openId) {
-        Account account = userMapper.queryCount(openId);
+    public JSONObject getAccount(String consumerId) {
+        Account account = userMapper.queryCount(consumerId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("account",account.getBalance());
+        jsonObject.put("details",getAccountDetail(consumerId).get("details"));
         return jsonObject;
     }
 
@@ -55,6 +57,14 @@ public class UserServiceImpl implements UserService {
         User[] users = userMapper.queryTeammates(openId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("teammates",users);
+        return jsonObject;
+    }
+
+    @Override
+    public JSONObject getAccountDetail(String consumerId) {
+        AccountDetail[] accountDetails = userMapper.queryAccountDetail(consumerId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("details",accountDetails);
         return jsonObject;
     }
 }

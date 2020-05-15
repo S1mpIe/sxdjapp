@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -37,6 +38,7 @@ public class InitServiceImpl implements InitService {
         attributes.put("appid",appId);
         attributes.put("secret",secret);
         attributes.put("grant_type","authorization_code");
+        System.out.println(code);
         JSONObject httpJsonObject = HttpUtil.sendGetRequest(heads, attributes, loginUrl);
         String openId = (String) httpJsonObject.get("openid");
         JSONObject jsonObject = new JSONObject();
@@ -46,7 +48,9 @@ public class InitServiceImpl implements InitService {
         }else {
             User user = userMapper.queryUser(openId);
             if(user == null){
+                userMapper.insertNewUser(openId);
                 userMapper.insertNewAccount(openId);
+                userMapper.insertNewAccountDetail(openId,new Date(System.currentTimeMillis()),"充值",null,10000);
             }
 //            else {
 //                user.setOpenId(null);
@@ -59,20 +63,6 @@ public class InitServiceImpl implements InitService {
             jsonObject.put("accessToken",token);
         }
 
-        return jsonObject;
-    }
-
-    @Override
-    public JSONObject register(String openId,User user) {
-        int rows = userMapper.insertNewUser(user);
-        JSONObject jsonObject = new JSONObject();
-        if (rows == 1) {
-            jsonObject.put("isLogin",true);
-            userMapper.insertNewAccount(openId);
-        } else {
-            jsonObject.put("isLogin",false);
-            jsonObject.put("errMsg","information invalid");
-        }
         return jsonObject;
     }
 }
