@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.finals.sxdj.repository.ArticleMapper">
+    <resultMap id="Article" type="Article" autoMapping="true"/>
+    <select id="queryArticle" resultMap="Article">
+        select * from article where id=#{articleId}
+    </select>
+    <select id="queryAllArticles" resultMap="Article">
+        select * from article;
+    </select>
+</mapper>
