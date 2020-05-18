@@ -20,7 +20,7 @@
         <result column="goods_number" property="number"/>
     </resultMap>
     <insert id="insertNewOrder" >
-        insert into `order` (consumer_id,put_time,status,pay,address_id) VALUES (#{consumerId},#{putTime},'处理中',#{pay},#{addressId});
+        insert into `order` (id,consumer_id,put_time,status,pay,address_id) VALUES (#{orderId},#{consumerId},#{putTime},'待发货',#{pay},#{addressId});
     </insert>
     <insert id="insertNewOrderData">
         insert into order_data (order_id, goods_id, goods_number,goods_price,goods_total_price) VALUES (#{orderId},#{goodsId},#{number},#{price},#{totalPrice})
@@ -114,7 +114,7 @@
                ep.*
             from shopping_address sa
             left join extract_point ep on ep.id=sa.extract_point
-            where sa.open_id=#{openId}
+            where sa.consumer_id=#{consumerId}
     </select>
     <delete id="deleteShoppingCartGoods">
         delete from shopping_cart where goods_id=#{goodsId} and open_id=#{openId}

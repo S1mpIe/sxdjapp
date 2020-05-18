@@ -3,48 +3,84 @@
 
 <mapper namespace="com.finals.sxdj.repository.TeamMapper">
     <resultMap id="Teams" type="Team" autoMapping="true">
-        <id column="id" property="id"/>
-        <result column="teamName" property="name"/>
-        <collection property="mates" javaType="java.util.List" ofType="User" autoMapping="true"/>
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <collection property="mates" javaType="java.util.List" ofType="Teammate" autoMapping="true">
+            <result column="mate_id" property="id"/>
+        </collection>
     </resultMap>
-    <insert id="insertNewTeam" >
-        insert into teams (name) values (#{name})
+    <resultMap id="Teammate" type="Teammate" autoMapping="true"/>
+    <resultMap id="TeamCart" type="TeamCart" autoMapping="true"/>
+    <resultMap id="TeamCarts" type="TeamCarts" autoMapping="true">
+        <result column="teamsId" property="teamsId"/>
+        <result column="mateId" property="mateId"/>
+        <collection property="carts" javaType="List" ofType="TeamCart" autoMapping="true"/>
+    </resultMap>
+    <insert id="insertNewTeam">
+        insert into teams (id,name) values (#{id},#{name})
+    </insert>
+    <insert id="insertCart">
+        insert into team_cart (source_id, open_id, team_id, goods_id, goods_number, status) VALUES (#{sourceId},#{openId},#{teamId},#{goodsId},#{number},'已提交');
     </insert>
     <insert id="insertNewTeammates">
-        insert into teammates (id, open_id, status) VALUES (#{teamId},#{mateId},#{status});
+        insert into teammates (team_id, open_id, nickname, status) values (#{teamId},#{openId},#{nickName},#{status})
     </insert>
     <select id="queryMateTeam" resultMap="Teams">
-        select t.id as id,
-               t.name as teamName,
-               u.name as name,
-               u.address as address,
-               u.phone_number as phoneNumber,
-               u.real_name as realName,
-               u.image_address as imageAddress,
-               u.sex as sex,
-               u.user_cate as userCate
-        from (select t1.id
-              from teams t1
-                       left join teammates tm1 on t1.id=tm1.id
-                       left join user u1 on tm1.open_id = u1.open_id
-              where u1.open_id=#{mateId}) temp
-            left join teams t on temp.id = t.id
-            left join teammates tm on t.id=tm.id
-            left join user u on tm.open_id = u.open_id
+        select t2.*,t3.id as mate_id, t3.team_id, t3.open_id, t3.nickname, t3.status from  (
+                       select * from teammates t1 where t1.open_id=#{mateId}
+                           ) temp
+        left join teams t2 on temp.team_id=t2.id
+        left join teammates t3 on t2.id = t3.team_id
     </select>
-    <select id="queryTeamByName" resultMap="Teams">
-        select t.id as id,
-               t.name as teamName,
-               u.name as name,
-               u.address as address,
-               u.phone_number as phoneNumber,
-               u.real_name as realName,
-               u.image_address as imageAddress,
-               u.sex as sex,
-               u.user_cate as userCate
-        from teams t
-                 left join teammates tm on t.id=tm.id
-                 left join user u on tm.open_id = u.open_id
-        where t.name=#{name}
+    <select id="queryMate" resultMap="Teammate">
+        select id, team_id, nickname, status from teammates where open_id=#{openId} and team_id=#{teamId}
     </select>
+    <select id="queryMateById" resultMap="Teammate">
+        select * from teammates where id=#{id}
+    </select>
+    <select id="queryMateCartById" resultMap="TeamCart">
+        select * from team_cart where source_id=#{sourceId} and team_id=#{teamId}
+    </select>
+    <select id="queryCart" resultMap="TeamCarts" >
+        select tm.team_id as teamsId,
+               tm.nickname as nickName,
+               tm.id as mateId,
+               tc.id,
+               source_id,
+               tc.team_id as teamId,
+               put_time, tc.goods_id,
+               goods_number, tc.status,
+               (gn.number- gn.sale_number) as stock ,
+               tm.nickname ,
+               g.image_address as imageUrl,
+               gp.number as price from team_cart tc
+               left join goods g on g.id=tc.goods_id
+               left join teammates tm on (tm.id=tc.source_id)
+               left join goods_number gn on g.id = gn.goods_id
+               left join goods_price gp on g.id = gp.goods_id
+        where tc.team_id=#{teamId}
+    </select>
+    <select id="queryMateSingleCart" resultMap="TeamCart">
+        select * from   team_cart where open_id=#{openId} and goods_id=#{goodsId} and team_id=#{teamId}
+    </select>
+    <select id="queryMateCart" resultMap="TeamCart">
+        select tc.id,
+               source_id,
+               tc.team_id as teamId,
+               put_time, tc.goods_id,
+               goods_number, tc.status,
+               (gn.number- gn.sale_number) as stock ,
+               g.image_address as imageUrl,
+               gp.number as price from team_cart tc
+               left join goods g on g.id=tc.goods_id
+               left join goods_number gn on g.id = gn.goods_id
+               left join goods_price gp on g.id = gp.goods_id
+        where tc.open_id=#{openId} and tc.team_id=#{teamId}
+    </select>
+    <delete id="deleteCart">
+        delete from team_cart where id=#{cartId}
+    </delete>
+    <delete id="deleteTeammate">
+        delete from teammates where id=#{mateId}
+    </delete>
 </mapper>

@@ -35,10 +35,7 @@ public class OrderServiceImpl implements OrderService {
         Iterator iterator = set.iterator();
         JSONObject jsonObject = new JSONObject();
         Order lastOrder = orderMapper.queryLastOrder();
-        int orderId = 0;
-        if (lastOrder != null){
-            orderId = lastOrder.getId() + 1;
-        }
+        long orderId = System.currentTimeMillis()/100;
         double totalPay = 0;
         log.error("start iterator");
         while (iterator.hasNext()){
@@ -66,9 +63,9 @@ public class OrderServiceImpl implements OrderService {
             jsonObject.put("status","failed");
             jsonObject.put("msg","balance not enough");
         }else {
-            orderMapper.insertNewOrder(openId,new Date(System.currentTimeMillis()),totalPay,orderJson.getIntValue("addressId"));
+            orderMapper.insertNewOrder(orderId,openId,new Date(System.currentTimeMillis()),totalPay,orderJson.getIntValue("addressId"));
             userMapper.updateConsumerBalance(openId,account.getBalance()-(double) Math.round(totalPay * 100) / 100);
-            userMapper.insertNewAccountDetail(openId,new Date(System.currentTimeMillis()),"消费",orderId,-1 * totalPay);
+            userMapper.insertNewAccountDetail(openId,new Date(System.currentTimeMillis()),"消费", (long) orderId,-1 * totalPay);
             jsonObject.put("status","success");
         }
         return jsonObject;

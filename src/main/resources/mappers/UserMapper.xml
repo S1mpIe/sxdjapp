@@ -27,7 +27,7 @@
     <update id="updateUser">
         update user set ${cate}=#{value} where open_id=#{openId}
     </update>
-    <update id="updateUserBalance">
+    <update id="updateConsumerBalance">
         update account set balance=#{balance} where open_id=#{consumerId}
     </update>
 </mapper>

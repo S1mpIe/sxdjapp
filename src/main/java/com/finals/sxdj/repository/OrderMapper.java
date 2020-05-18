@@ -11,11 +11,11 @@ import java.util.Date;
 
 @Component
 public interface OrderMapper {
-    void insertNewOrder(String consumerId, Date putTime,double pay,int addressId);
+    void insertNewOrder(long orderId,String consumerId, Date putTime,double pay,int addressId);
     void insertToShoppingCart(String openId,int goodsId,int number);
-    void insertNewOrderData(int orderId,int goodsId,int number,double price,double totalPrice);
+    void insertNewOrderData(long orderId,int goodsId,int number,double price,double totalPrice);
     void insertNewShoppingAddress(String name,int pointId,String number, String openId);
-    void updateOrder(int id,String cate,String value);
+    void updateOrder(long id,String cate,String value);
     void updateShoppingCart(String openId,int goodsId,int number);
     void updateOrderData(String cate,String value);
     Order queryOrderById(String orderId);
@@ -25,6 +25,6 @@ public interface OrderMapper {
     OrderData[] queryById(int orderId);
     GoodsData[] queryShoppingCart(String openId);
     CartGoods queryShoppingCartGoods(String openId, int goodsId);
-    ShoppingAddress[] queryAllShoppingAddress(String openId);
+    ShoppingAddress[] queryAllShoppingAddress(String consumerId);
     void deleteShoppingCartGoods(String openId, int goodsId);
 }
