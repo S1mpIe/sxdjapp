@@ -64,4 +64,12 @@
     <update id="updateGoodsNumber">
         update goods_number set number=#{number} where goods_id=#{id}
     </update>
+    <update id="offGoods">
+        update goods set if_delete=1 where id=#{goodsId};
+    </update>
+    <delete id="deleteGoods" >
+        delete from goods where id=#{goodsId};
+        delete from goods_price where goods_id=#{goodsId};
+        delete from goods_number where goods_id=#{goodsId}
+    </delete>
 </mapper>

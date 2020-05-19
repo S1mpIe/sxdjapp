@@ -19,4 +19,8 @@ public interface GoodsMapper {
     void updateGoodsNumber(int id,int number);
     void updateGoodsSaleNumber(int id,int saleNumber);
     void increaseSaleNumber(int id,int saleNumber);
+
+    void deleteGoods(int goodsId);
+
+    void offGoods(int goodsId);
 }

@@ -6,6 +6,8 @@
     <resultMap id="Goods" type="GoodsData" autoMapping="true">
 
     </resultMap>
+    <resultMap id="Resources" type="Resources" autoMapping="true"/>
+    <resultMap id="FarmerOrder" type="FarmerOrder" autoMapping="true"/>
     <select id="queryAllFarmers" resultMap="Farmer" >
         select * from farmers
     </select>
@@ -16,8 +18,20 @@
         select * from farmers where id=#{farmerId}
     </select>
     <insert id="insertVerifiedFarmer" >
-        insert into farmers (open_id,name,introduce,status) values (#{openId},#{name},#{introduce},'待审核')
+        insert into farmers (open_id, name, introduce, image_address, cate, status) values (#{openId},#{farmers.name},#{farmers.introduce},#{farmers.imageAddress},#{farmers.cate},'已通过')
     </insert>
+    <insert id="insertNewGoods" >
+        insert into goods (name, origin_id, image_address, category) VALUES (#{goods.name},#{goods.farmerId},#{goods.imageAddress},#{goods.category})
+    </insert>
+    <insert id="insertPathData">
+        insert into path_data (url, id) VALUES (#{url},#{id})
+    </insert>
+    <insert id="insertResource" >
+        insert into resources (owner, cate, path_id) VALUES (#{owner},#{cate},#{id})
+    </insert>
+    <select id="getResource" resultMap="Resources">
+        select resources.*,pd.url,pd.id as pathId from resources left join path_data pd on pd.id=resources.path_id where resources.cate=#{cate} and resources.owner=#{owner}
+    </select>
     <select id="queryAllSold" resultMap="Goods">
         select g.id as id,
                g.image_address as imageUrl,
@@ -34,4 +48,20 @@
                  left join goods_price gp on gp.goods_id=g.id
         where f.id=#{farmerId} and g.if_delete=0
     </select>
+    <select id="queryFarmerOrder" resultMap="FarmerOrder">
+        select od.*,gn.unit as numberUnit,`order`.put_time,g.image_address as imageUrl
+        from `order`
+        left join order_data od on `order`.id = od.order_id
+        left join goods g on od.goods_id = g.id
+        left join goods_price gp on g.id = gp.goods_id
+        left join goods_number gn on g.id = gn.goods_id
+        where g.origin_id=#{farmerId}
+    </select>
+    <update id="updateFarmer" >
+        update farmers set ${key}=#{value}
+    </update>
+    <delete id="deleteImage" >
+        delete from resources where path_id=#{id};
+        delete from path_data where id=#{id};
+    </delete>
 </mapper>
