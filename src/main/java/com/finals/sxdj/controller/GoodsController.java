@@ -5,9 +5,7 @@ import com.finals.sxdj.services.GoodsService;
 import com.finals.sxdj.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,5 +18,15 @@ public class GoodsController {
     @ResponseBody
     public JSONObject getSingleGoods(HttpServletRequest request, @RequestParam("goodsId")int goodsId){
         return goodsService.getGoodsData(goodsId, JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
+    }
+    @GetMapping("/goods/comment")
+    @ResponseBody
+    public JSONObject getGoodsComment(@RequestParam("goodsId")long goodsId) {
+        return goodsService.getGoodsComment(goodsId);
+    }
+    @PutMapping("/goods/comment")
+    @ResponseBody
+    public JSONObject putGoodsComment(@RequestBody String body){
+        return goodsService.putGoodsComment(body);
     }
 }

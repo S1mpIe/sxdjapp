@@ -28,6 +28,11 @@ public class ExtractController {
     public JSONObject getExtract(HttpServletRequest request){
         return extractService.getPersonPoint(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
     }
+    @PostMapping("/extract")
+    @ResponseBody
+    public JSONObject changeExtract(HttpServletRequest request,@RequestParam("status")String status){
+        return extractService.updatePointStatus(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),status);
+    }
     @PostMapping("/extract/orders")
     @ResponseBody
     public JSONObject receiveGoods(HttpServletRequest request,@RequestParam("orderId")int orderId){

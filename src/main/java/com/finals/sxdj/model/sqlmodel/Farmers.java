@@ -11,7 +11,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class Farmers {
-    private String id;
+    private long id;
     private String openId;
     private String name;
     private String phone;

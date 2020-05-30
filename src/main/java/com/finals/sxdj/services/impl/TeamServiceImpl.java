@@ -39,7 +39,7 @@ public class TeamServiceImpl implements TeamService {
             long id = System.currentTimeMillis()/1000;
             teamMapper.insertNewTeam(id,name);
             teamMapper.insertNewTeammates(id,captainId,"队长",nickName);
-            userMapper.insertNewAccount("team-" + id);
+            userMapper.insertNewAccount("team-" + id,10000);
             jsonObject.put("status","success");
         }
         return jsonObject;
@@ -90,7 +90,7 @@ public class TeamServiceImpl implements TeamService {
                 //获取当前队员所有团队购物车订单
                 TeamCart[] teamCarts = teamMapper.queryMateCart(teamId,teammate.getOpenId());
                 //开始遍历选中的订单
-                for (Integer i:mate.getGoods()){
+                for (Long i:mate.getGoods()){
                     for (TeamCart cart:teamCarts) {
                         if (i == cart.getId()){
                             GoodsData goodsData = goodsMapper.queryGoodsById(cart.getGoodsId());
@@ -104,7 +104,7 @@ public class TeamServiceImpl implements TeamService {
                                 double totalPrice = goodsData.getPrice() * cart.getGoodsNumber();
                                 total += goodsData.getPrice() * cart.getGoodsNumber();
                                 orderMapper.insertNewOrderData(orderId,goodsData.getId(),cart.getGoodsNumber(),goodsData.getPrice(),(double) Math.round(total * 100) /100);
-                                teamMapper.deleteCart(cart.getId());
+                                teamMapper.bookCart(cart.getId());
                             }
                         }
                     }
@@ -228,6 +228,65 @@ public class TeamServiceImpl implements TeamService {
         }else{
             jsonObject.put("status","failed");
         }
+        return jsonObject;
+    }
+
+    @Override
+    public JSONObject getTeammember(String openId, long teamId) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("members",teamMapper.queryTeamMembers(teamId));
+        return jsonObject;
+    }
+
+    @Override
+    public JSONObject updateTeamAccount(long teamId, double number) {
+        String teamOpenId = "team-" + teamId;
+        Account account = userMapper.queryCount(teamOpenId);
+        userMapper.updateConsumerBalance(teamOpenId,account.getBalance() + number);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("status","success");
+        return jsonObject;
+    }
+
+    @Override
+    public JSONObject getTeamAccount(long teamId) {
+        JSONObject jsonObject = new JSONObject();
+        String teamOpenId = "team-" + teamId;
+        jsonObject.put("balance",userMapper.queryCount(teamOpenId).getBalance());
+        jsonObject.put("details",userMapper.queryAccountDetail(teamOpenId));
+        return jsonObject;
+    }
+
+    @Override
+    public JSONObject quitTeam(long teamId, String openId) {
+        Teammate teammate = teamMapper.queryMate(openId, teamId);
+        teamMapper.quitTeam(teamId,teammate.getId());
+        return null;
+    }
+
+    @Override
+    public JSONObject changeNickName(long teamId, int mateId, String nickName) {
+        teamMapper.updateTeammate(teamId,mateId,"nickname",nickName);
+        return null;
+    }
+
+    @Override
+    public JSONObject transferLeader(int leaderId, int mateId, long teamId) {
+        teamMapper.updateTeammate(teamId,leaderId,"status","成员");
+        teamMapper.updateTeammate(teamId,mateId,"status","队长");
+        return null;
+    }
+
+    @Override
+    public JSONObject changeGoods(long teamId, String openId, long id, int number) {
+        if(number == 0){
+            teamMapper.deleteCart(id);
+        }else {
+            TeamCart cart = teamMapper.queryCartById(id);
+            teamMapper.updateCart(openId,teamId,cart.getGoodsId(),number);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("status","success");
         return jsonObject;
     }
 

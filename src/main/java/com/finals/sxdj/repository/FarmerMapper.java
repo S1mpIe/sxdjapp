@@ -4,6 +4,7 @@ import com.finals.sxdj.model.FarmerOrder;
 import com.finals.sxdj.model.GoodsData;
 import com.finals.sxdj.model.Resources;
 import com.finals.sxdj.model.sqlmodel.Farmers;
+import com.finals.sxdj.model.sqlmodel.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,15 +21,15 @@ public interface FarmerMapper {
     Farmers[] queryAllFarmers();
     Farmers queryFarmer(String openId);
     Farmers queryFarmerById(int farmerId);
-    GoodsData[] queryAllSold(int farmerId);
-    Resources[] getResource(String cate, long id);
-    FarmerOrder[] queryFarmerOrder(int farmerId);
-    int insertVerifiedFarmer(String openId,Farmers farmers);
-    int insertNewGoods(GoodsData goods,int farmerId);
+    GoodsData[] queryAllSold(long farmerId);
+    Resources[] getResource(String cate, long owner);
+    Order[] queryFarmerOrder(int farmerId);
+    int insertVerifiedFarmer(Farmers farmers);
+    int insertNewGoods(long id, GoodsData goods, long farmerId);
     int insertPathData(long id, String url);
-    void updateFarmer(String openId,String key,String value);
+    void updateFarmer(Farmers farmers);
     void updateGoods(GoodsData goodsData);
     void deleteImage(long id);
-
     void insertResource(Long owner, String cate, long ids);
+    void deleteAllResource(long owner, String cate);
 }

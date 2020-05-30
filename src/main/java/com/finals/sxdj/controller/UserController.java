@@ -38,6 +38,11 @@ public class UserController {
     public JSONObject getPersonAccount(HttpServletRequest request){
         return userService.getAccount(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
     }
+    @PostMapping("/account")
+    @ResponseBody
+    public JSONObject updatePersonAccount(HttpServletRequest request,@RequestParam("number")double number){
+        return userService.updateAccount(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),number);
+    }
 
     @GetMapping("/account/detail")
     @ResponseBody

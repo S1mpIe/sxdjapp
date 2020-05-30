@@ -3,6 +3,7 @@
 
 <mapper namespace="com.finals.sxdj.repository.GoodsMapper">
     <resultMap id="GoodsData" type="GoodsData" autoMapping="true"/>
+    <resultMap id="Comment" type="Comment" autoMapping="true"/>
     <select id="queryGoodsByRecommend" resultMap="GoodsData" parameterType="int">
         select g.id as id,
                g.image_address as imageUrl,
@@ -14,7 +15,7 @@
                gp.number as price,
                gp.unti as priceUnit,
                gn.sale_number as soldNumber,
-               g.origin_id as orginId
+               g.origin_id as originId
         from recommend_goods rg
                  left join goods g on g.id=rg.goods_id
                  left join farmers f on f.id=g.origin_id
@@ -33,7 +34,7 @@
                gp.number as price,
                gp.unti as priceUnit,
                gn.sale_number as soldNumber,
-               g.origin_id as orginId
+               g.origin_id as originId
         from goods g
                  left join farmers f on f.id=g.origin_id
                  left join goods_number gn on gn.goods_id=g.id
@@ -51,13 +52,19 @@
               gp.number as price,
               gp.unti as priceUnit,
               gn.sale_number as soldNumber,
-              g.origin_id as orginId
+              g.origin_id as originId
        from goods g
                 left join farmers f on f.id=g.origin_id
                 left join goods_number gn on gn.goods_id=g.id
                 left join goods_price gp on gp.goods_id=g.id
        where g.id=#{id} and g.if_delete=0
     </select>
+    <select id="queryComments" resultMap="Comment">
+        select * from comments where goodsId=#{goodsId}
+    </select>
+    <insert id="insertComment" >
+        insert into comments (goodsId, starts, content, sender, put_time) values (#{key},#{stars},#{value},#{author},#{time})
+    </insert>
     <update id="increaseSaleNumber">
         update goods_number set sale_number=(sale_number+#{saleNumber}) where goods_id=#{id}
     </update>

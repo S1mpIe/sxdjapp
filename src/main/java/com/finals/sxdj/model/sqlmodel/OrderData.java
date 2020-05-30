@@ -11,8 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class OrderData {
     private String name;
-    private int orderId;
-    private int goodsId;
+    private long orderId;
+    private long goodsId;
     private int goodsNumber;
     private String imageUrl;
     private double goodsPrice;

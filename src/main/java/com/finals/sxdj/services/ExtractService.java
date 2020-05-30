@@ -9,5 +9,5 @@ public interface ExtractService {
     JSONObject getPersonPoint(String openId);
     JSONObject getAllAuditedPoint();
     JSONObject receiveGoods(String openId,int orderId);
-    JSONObject updatePointStatus(int pointId,String status);
+    JSONObject updatePointStatus(String openId, String status);
 }

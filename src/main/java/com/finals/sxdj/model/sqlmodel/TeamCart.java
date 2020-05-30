@@ -11,6 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class TeamCart {
     private long id;
+    private String goodsName;
     private long sourceId;
     private String openId;
     private long teamId;

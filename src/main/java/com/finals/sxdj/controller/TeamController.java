@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -29,10 +30,25 @@ public class TeamController {
     public JSONObject applyNewTeam(@RequestParam("name")String name,@RequestParam("nickName")String nickname,HttpServletRequest request){
         return  teamService.applyNewTeam(name,JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),nickname);
     }
+    @DeleteMapping("/team")
+    @ResponseBody
+    public JSONObject quitTeam(@RequestParam("teamId")long teamId,HttpServletRequest request){
+        return teamService.quitTeam(teamId,JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
+    }
     @PutMapping("/teammate")
     @ResponseBody
     public JSONObject applyNewTeammate(@RequestParam("teamCode")String teamCode,@RequestParam("nickName")String nickname,HttpServletRequest request){
         return teamService.applyNewTeammate(teamCode,JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),nickname);
+    }
+    @PostMapping("/teammate")
+    @ResponseBody
+    public JSONObject changeNickName(@RequestParam("teamId")long teamId,@RequestParam("mateId")int mateId,@RequestParam("nickName")String nickName){
+        return teamService.changeNickName(teamId,mateId,nickName);
+    }
+    @PostMapping("/teammate/leader")
+    @ResponseBody
+    public JSONObject transferLeader(@RequestParam("leaderId")int leaderId,@RequestParam("mateId")int mateId,@RequestParam("teamId")long teamId){
+        return teamService.transferLeader(leaderId,mateId,teamId);
     }
     @GetMapping("/teammate")
     @ResponseBody
@@ -43,6 +59,11 @@ public class TeamController {
     @ResponseBody
     public JSONObject deleteTeammate(HttpServletRequest request,@RequestParam("teamId")long teamId,@RequestParam("mateId")long mateId){
         return teamService.deleteTeammate(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),teamId,mateId);
+    }
+    @GetMapping("/teammember")
+    @ResponseBody
+    public JSONObject getTeammember(HttpServletRequest request,@RequestParam("teamId")long teamId){
+        return teamService.getTeammember(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),teamId);
     }
     @GetMapping("/team/orders")
     @ResponseBody
@@ -66,8 +87,13 @@ public class TeamController {
     }
     @PutMapping("/team/cart")
     @ResponseBody
-    public JSONObject addGoodsToTeamCart(HttpServletRequest request,@RequestParam("teamId")long teamId,@RequestParam("goodsId") int goodsId,@RequestParam("number")int number){
-        return teamService.putNewGoods(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),teamId,goodsId,number);
+    public JSONObject addGoodsToTeamCart(HttpServletRequest request,@RequestParam("teamId")long teamId,@RequestParam("goodsId") int goodsId,@RequestParam("number")int number) {
+        return teamService.putNewGoods(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"), teamId, goodsId, number);
+    }
+    @PostMapping("/team/cart")
+    @ResponseBody
+    public JSONObject changeGoods(@RequestParam("teamId")long teamId,HttpServletRequest request,@RequestParam("cartId")long id,@RequestParam("number")int number){
+        return teamService.changeGoods(teamId,JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),id,number);
     }
     @DeleteMapping("/team/cart")
     @ResponseBody
@@ -93,5 +119,15 @@ public class TeamController {
     @ResponseBody
     public JSONObject getTeamDisCount(HttpServletRequest request){
         return teamService.getTeamDisCount(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
+    }
+    @GetMapping("/team/account")
+    @ResponseBody
+    public JSONObject getTeamAccount(@RequestParam("teamId")long teamId){
+        return teamService.getTeamAccount(teamId);
+    }
+    @PostMapping("/team/account")
+    @ResponseBody
+    public JSONObject updateTeamAccount(@RequestParam("teamId")long teamId,@RequestParam("number")double number){
+        return teamService.updateTeamAccount(teamId,number);
     }
 }

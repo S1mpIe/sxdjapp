@@ -59,7 +59,7 @@ public class ExtractServiceImpl implements ExtractService {
 
     @Override
     public JSONObject getAllAuditedPoint() {
-        ExtractPoint[] extractPoints = extractMapper.queryAllPoint("已通过");
+        ExtractPoint[] extractPoints = extractMapper.queryAllPoint("%");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("extractPoints",extractPoints);
         return jsonObject;
@@ -74,8 +74,8 @@ public class ExtractServiceImpl implements ExtractService {
     }
 
     @Override
-    public JSONObject updatePointStatus(int pointId, String status) {
-        extractMapper.updatePointStatus(pointId,status);
+    public JSONObject updatePointStatus(String openId, String status) {
+        extractMapper.updatePointStatus(openId,status);
         return null;
     }
 }

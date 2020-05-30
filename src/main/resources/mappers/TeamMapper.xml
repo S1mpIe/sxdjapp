@@ -41,11 +41,15 @@
     <select id="queryMateCartById" resultMap="TeamCart">
         select * from team_cart where source_id=#{sourceId} and team_id=#{teamId}
     </select>
+    <select id="queryTeamMembers" resultMap="Teammate">
+        select id, team_id, nickname, status from teammates where team_id=#{teamId}
+    </select>
     <select id="queryCart" resultMap="TeamCarts" >
         select tm.team_id as teamsId,
                tm.nickname as nickName,
                tm.id as mateId,
                tc.id,
+               g.name as goodsName,
                source_id,
                tc.team_id as teamId,
                put_time, tc.goods_id,
@@ -58,13 +62,14 @@
                left join teammates tm on (tm.id=tc.source_id)
                left join goods_number gn on g.id = gn.goods_id
                left join goods_price gp on g.id = gp.goods_id
-        where tc.team_id=#{teamId}
+        where tc.team_id=#{teamId} and tc.status='已提交'
     </select>
     <select id="queryMateSingleCart" resultMap="TeamCart">
-        select * from   team_cart where open_id=#{openId} and goods_id=#{goodsId} and team_id=#{teamId}
+        select * from team_cart where open_id=#{openId} and goods_id=#{goodsId} and team_id=#{teamId}
     </select>
     <select id="queryMateCart" resultMap="TeamCart">
         select tc.id,
+               g.name as goodsName,
                source_id,
                tc.team_id as teamId,
                put_time, tc.goods_id,
@@ -77,6 +82,33 @@
                left join goods_price gp on g.id = gp.goods_id
         where tc.open_id=#{openId} and tc.team_id=#{teamId}
     </select>
+    <select id="queryCartById" resultMap="TeamCart">
+        select tc.id,
+               g.name as goodsName,
+               source_id,
+               tc.team_id as teamId,
+               put_time, tc.goods_id,
+               goods_number, tc.status,
+               (gn.number- gn.sale_number) as stock ,
+               g.image_address as imageUrl,
+               gp.number as price from team_cart tc
+                                           left join goods g on g.id=tc.goods_id
+                                           left join goods_number gn on g.id = gn.goods_id
+                                           left join goods_price gp on g.id = gp.goods_id
+            where tc.id=#{cartId}
+    </select>
+    <update id="updateTeammate">
+        update teammates set ${key}=#{value} where id=#{mateId} and team_id=#{teamId}
+    </update>
+    <update id="updateCart">
+        update team_cart set goods_number=#{number} where team_id=#{teamId} and open_id=#{openId} and goods_id=#{goodsId}
+    </update>
+    <update id="bookCart" >
+        update team_cart set status='已下单' where id=#{cartId}
+    </update>
+    <delete id="quitTeam" >
+        delete from teammates where team_id=#{teamId} and id=#{mateId}
+    </delete>
     <delete id="deleteCart">
         delete from team_cart where id=#{cartId}
     </delete>

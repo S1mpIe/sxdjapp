@@ -19,5 +19,6 @@ public class ExtractPoint {
     private double longitude;
     private String phoneNumber;
     private String address;
+    private String status;
     private int area;
 }

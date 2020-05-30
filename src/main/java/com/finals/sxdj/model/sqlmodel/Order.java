@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Order {
-    private int id;
+    private long id;
     private String consumerId;
     private Date resultTime;
     private Date putTime;

@@ -13,7 +13,7 @@ import java.util.Date;
 public interface OrderMapper {
     void insertNewOrder(long orderId,String consumerId, Date putTime,double pay,int addressId);
     void insertToShoppingCart(String openId,int goodsId,int number);
-    void insertNewOrderData(long orderId,int goodsId,int number,double price,double totalPrice);
+    void insertNewOrderData(long orderId,long goodsId,int number,double price,double totalPrice);
     void insertNewShoppingAddress(String name,int pointId,String number, String openId);
     void updateOrder(long id,String cate,String value);
     void updateShoppingCart(String openId,int goodsId,int number);
@@ -24,7 +24,7 @@ public interface OrderMapper {
     Order queryLastOrder();
     OrderData[] queryById(int orderId);
     GoodsData[] queryShoppingCart(String openId);
-    CartGoods queryShoppingCartGoods(String openId, int goodsId);
+    CartGoods queryShoppingCartGoods(String openId, long goodsId);
     ShoppingAddress[] queryAllShoppingAddress(String consumerId);
-    void deleteShoppingCartGoods(String openId, int goodsId);
+    void deleteShoppingCartGoods(String openId, long goodsId);
 }

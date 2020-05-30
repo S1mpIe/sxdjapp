@@ -16,13 +16,17 @@ public interface TeamMapper {
     Team[] queryMateTeam(String mateId);
     Teammate queryMate(String openId,long teamId);
     Teammate queryMateById(long id);
+    Teammate[] queryTeamMembers(long teamId);
     Team queryTeamById(long teamId);
     TeamCarts[] queryCart(long teamId);
     TeamCart[] queryMateCart(long teamId,String openId);
     TeamCart[] queryMateCartById(long teamId,long sourceId);
+    TeamCart queryCartById(long cartId);
     TeamCart queryMateSingleCart(String openId,long teamId,int goodsId);
     void updateCart(String openId,long teamId,int goodsId,int number);
+    void bookCart(long cartId);
+    void updateTeammate(long teamId,int mateId,String key,String value);
     int deleteCart(long cartId);
-
+    int quitTeam(long teamId,int mateId);
     void deleteTeammate(long mateId);
 }

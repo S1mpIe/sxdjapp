@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public JSONObject addNewAccount(String openId) {
-        userMapper.insertNewAccount(openId);
+        userMapper.insertNewAccount(openId,10000);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("status","success");
         return jsonObject;
@@ -66,5 +66,11 @@ public class UserServiceImpl implements UserService {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("details",accountDetails);
         return jsonObject;
+    }
+
+    @Override
+    public JSONObject updateAccount(String openId, double number) {
+        userMapper.updateConsumerBalance(openId,userMapper.queryCount(openId).getBalance() + number);
+        return null;
     }
 }

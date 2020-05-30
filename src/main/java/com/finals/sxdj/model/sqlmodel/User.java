@@ -12,6 +12,7 @@ import lombok.ToString;
 @ToString
 public class User {
     private String openId;
+    private int level;
     private String name;
     private String realName;
     private String address;

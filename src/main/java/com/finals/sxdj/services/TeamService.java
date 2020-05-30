@@ -19,4 +19,17 @@ public interface TeamService {
     JSONObject getTeamCode(String openId,long teamId);
     JSONObject getTeamAllCart(String openId,long teamId);
     JSONObject deleteTeammate(String openId, long teamId, long mateId);
+
+    JSONObject getTeammember(String openId, long teamId);
+
+    JSONObject updateTeamAccount(long teamId, double number);
+    JSONObject getTeamAccount(long teamId);
+
+    JSONObject quitTeam(long teamId, String openId);
+
+    JSONObject changeNickName(long teamId, int mateId, String nickName);
+
+    JSONObject transferLeader(int leaderId, int mateId, long teamId);
+
+    JSONObject changeGoods(long teamId, String openId, long id, int number);
 }

@@ -14,7 +14,7 @@ public interface UserMapper {
     Account queryCount(String consumerId);
     AccountDetail[] queryAccountDetail(String consumerId);
     int insertNewUser(String openId);
-    int insertNewAccount(String consumerId);
+    int insertNewAccount(String consumerId,int number);
     int insertNewAccountDetail(String consumerId, Date time, String cause, Long source, double change);
     int updateUser(String cate,String value,String openId);
     int updateConsumerBalance(String consumerId, double balance);

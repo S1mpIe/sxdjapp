@@ -11,16 +11,17 @@ import lombok.ToString;
 @Getter
 @ToString
 public class GoodsData {
-    private int id;
+    private long id;
     private String name;
     private String imageUrl;
     private int number;
     private String numberUnit;
     private int soldNumber;
     private String origin;
-    private int originId;
+    private long originId;
     private String category;
     private double price;
     private String priceUnit;
     private int selectNumber;
+    private int ifDelete;
 }

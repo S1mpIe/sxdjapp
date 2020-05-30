@@ -12,6 +12,6 @@ import java.util.Map;
 @NoArgsConstructor
 @ToString
 public class TeammateOrder {
-    private int id;
-    private List<Integer> goods;
+    private Long id;
+    private List<Long> goods;
 }

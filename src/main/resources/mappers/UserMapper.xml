@@ -19,7 +19,7 @@
                         (#{openId},'个人用户');
     </insert>
     <insert id="insertNewAccount" parameterType="String">
-        insert into account (open_id, balance) VALUES (#{consumerId},10000);
+        insert into account (open_id, balance) VALUES (#{consumerId},#{number});
     </insert>
     <insert id="insertNewAccountDetail">
         insert into account_detailed (consumer_id, `change`, cause, source, time) VALUES (#{consumerId},#{change},#{cause},#{source},#{time})

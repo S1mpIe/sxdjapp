@@ -17,17 +17,17 @@
                 #{point.name},
                 #{point.phoneNumber},
                 #{point.address},
-                #{point.area},'待审核')
+                #{point.area},'正在休息')
     </insert>
     <select id="queryPersonPoint" resultMap="ExtractPoints">
         select * from extract_point where open_id=#{openId}
     </select>
     <update id="updatePointStatus" >
-        update extract_point set status=#{status} where id=#{pointId};
+        update extract_point set status=#{status} where open_id=#{openId};
     </update>
 
     <select id="queryAllActivePoint" resultMap="ExtractPoints">
-        select * from extract_point where (latitude - #{latitude}) &lt; #{disparity} and (longitude - #{latitude}) &lt; #{disparity};
+        select * from extract_point where (latitude - #{latitude}) &lt; #{disparity} and (longitude - #{latitude}) &lt; #{disparity} where status='正在营业';
     </select>
 
 </mapper>

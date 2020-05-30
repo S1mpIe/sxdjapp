@@ -8,6 +8,10 @@
     </resultMap>
     <resultMap id="Resources" type="Resources" autoMapping="true"/>
     <resultMap id="FarmerOrder" type="FarmerOrder" autoMapping="true"/>
+    <resultMap id="Order" type="Order" autoMapping="true">
+        <id column="id" property="id"/>
+        <collection property="goods" javaType="List" ofType="com.finals.sxdj.model.sqlmodel.OrderData" autoMapping="true"/>
+    </resultMap>
     <select id="queryAllFarmers" resultMap="Farmer" >
         select * from farmers
     </select>
@@ -17,14 +21,16 @@
     <select id="queryFarmerById" resultMap="Farmer">
         select * from farmers where id=#{farmerId}
     </select>
-    <insert id="insertVerifiedFarmer" >
-        insert into farmers (open_id, name, introduce, image_address, cate, status) values (#{openId},#{farmers.name},#{farmers.introduce},#{farmers.imageAddress},#{farmers.cate},'已通过')
+    <insert id="insertVerifiedFarmer" useGeneratedKeys="true" keyProperty="id" >
+        insert into farmers (open_id, name, introduce, image_address, cate, status) values (#{openId},#{name},#{introduce},#{imageAddress},#{cate},'已通过')
     </insert>
     <insert id="insertNewGoods" >
-        insert into goods (name, origin_id, image_address, category) VALUES (#{goods.name},#{goods.farmerId},#{goods.imageAddress},#{goods.category})
+        insert into goods (id,name, origin_id, image_address, category) VALUES (#{id},#{goods.name},#{farmerId},#{goods.imageUrl},#{goods.category});
+        insert into goods_number (goods_id, number, unit, sale_number) VALUES (#{id},#{goods.number},#{goods.numberUnit},0);
+        insert into goods_price (goods_id, number, unti) VALUES (#{id},#{goods.price},#{goods.numberUnit})
     </insert>
     <insert id="insertPathData">
-        insert into path_data (url, id) VALUES (#{url},#{id})
+        insert into path_data (url, id) VALUES (#{url},#{ids})
     </insert>
     <insert id="insertResource" >
         insert into resources (owner, cate, path_id) VALUES (#{owner},#{cate},#{id})
@@ -41,27 +47,76 @@
                (gn.number-gn.sale_number) as number,
                gn.unit as numberUnit,
                gp.number as price,
-               gp.unti as priceUnit
+               gp.unti as priceUnit,
+                g.if_delete as ifDetele
         from     goods g
                  left join farmers f on f.id=g.origin_id
                  left join goods_number gn on gn.goods_id=g.id
                  left join goods_price gp on gp.goods_id=g.id
-        where f.id=#{farmerId} and g.if_delete=0
+        where f.id=#{farmerId}
     </select>
-    <select id="queryFarmerOrder" resultMap="FarmerOrder">
-        select od.*,gn.unit as numberUnit,`order`.put_time,g.image_address as imageUrl
-        from `order`
-        left join order_data od on `order`.id = od.order_id
-        left join goods g on od.goods_id = g.id
-        left join goods_price gp on g.id = gp.goods_id
-        left join goods_number gn on g.id = gn.goods_id
+    <select id="queryFarmerOrder" resultMap="Order">
+        select
+            o.id, result_time, put_time, over_time,o. status, pay,
+            od.*,
+            g.image_address as imageUrl,
+            g.name as name,
+            sa.name as receiver,
+            f.id as originId,
+            f.name as origin,
+            ep.id as extractPoint,
+            ep.address as extractAddress
+        from `order` as o
+                 left join order_data od on o.id = od.order_id
+                 left join goods g on od.goods_id = g.id
+                 left join farmers f on f.id=g.origin_id
+                 left join shopping_address sa on sa.id=o.address_id
+                 left join extract_point ep on ep.id=sa.extract_point
         where g.origin_id=#{farmerId}
     </select>
     <update id="updateFarmer" >
-        update farmers set ${key}=#{value}
+        update farmers set name=#{name}, image_address=#{imageAddress} ,phone=#{phone},introduce=#{introduce} where open_id=#{openId}
+    </update>
+    <update id="updateGoods">
+        update goods
+        <set>
+            <if test="name != null and name != ''">
+                name=#{name},
+            </if>
+            <if test="imageUrl != null and imageUrl != ''">
+                image_address=#{imageUrl},
+            </if>
+            <if test="category != null and category != ''">
+                category=#{category},
+            </if>
+            <if test="ifDelete != null and ifDelete != ''">
+                if_delete=#{ifDelete},
+            </if>
+        </set>
+            where id=#{id};
+        update goods_number
+        <set>
+            <if test="number != null and number != ''">
+                number=(#{number} + sale_number},
+            </if>
+            <if test="numberUnit != null and numberUnit != ''">
+                unit=#{numberUnit},
+            </if>
+        </set>
+        where goods_id=#{id};
+        update goods_price
+        <set>
+            <if test="price != null and price != ''">
+                price=#{price},
+            </if>
+        </set>
+        where goods_id=#{id};
     </update>
     <delete id="deleteImage" >
         delete from resources where path_id=#{id};
         delete from path_data where id=#{id};
+    </delete>
+    <delete id="deleteAllResource">
+        delete from resources where owner=#{owner} and cate=#{cate}
     </delete>
 </mapper>

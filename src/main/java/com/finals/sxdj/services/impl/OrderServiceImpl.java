@@ -115,7 +115,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public JSONObject getPersonOrders(String openId,String status) {
         JSONObject jsonObject = new JSONObject();
-        System.out.println(openId+status);
         Order[] orders = orderMapper.queryOrdersByConsumer(openId,status);
         jsonObject.put("orders",orders);
         return jsonObject;

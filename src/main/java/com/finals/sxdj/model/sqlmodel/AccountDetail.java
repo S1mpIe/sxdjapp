@@ -13,6 +13,6 @@ public class AccountDetail {
     private String consumerId;
     private String change;
     private String cause;
-    private int source;
+    private long source;
     private Date time;
 }

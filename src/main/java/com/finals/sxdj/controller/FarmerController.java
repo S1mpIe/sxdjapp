@@ -27,7 +27,11 @@ public class FarmerController {
     public JSONObject getPersonFarmer(HttpServletRequest request){
         return farmerService.queryFarmer(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
     }
-
+    @PostMapping("/farmer/self")
+    @ResponseBody
+    public JSONObject changePersonFarmer(HttpServletRequest request, @RequestBody Farmers farmers){
+        return farmerService.changeFarmer(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),farmers);
+    }
     @GetMapping("/farmer/goods")
     @ResponseBody
     public JSONObject getAllGoods(@RequestParam("farmerId") int farmerId){
@@ -35,12 +39,18 @@ public class FarmerController {
     }
     @PutMapping("/farmer/self/goods")
     @ResponseBody
-    public JSONObject insertNewGoods(@RequestParam("farmerId")int farmerId,@RequestParam("goods")GoodsData goods){
+    public JSONObject insertNewGoods(@RequestBody String body){
+        JSONObject jsonObject = JSONObject.parseObject(body);
+        Long farmerId = jsonObject.getLong("farmerId");
+        GoodsData goods = jsonObject.getObject("goods",GoodsData.class);
         return farmerService.applyGoods(goods,farmerId);
     }
     @PostMapping("/farmer/self/goods")
     @ResponseBody
-    public JSONObject changeGoods(int farmerId,@RequestParam("goods")GoodsData goods){
+    public JSONObject changeGoods(@RequestBody String body){
+        JSONObject jsonObject = JSONObject.parseObject(body);
+        Long farmerId = jsonObject.getLong("farmerId");
+        GoodsData goods = jsonObject.getObject("goods",GoodsData.class);
         return farmerService.updateGoods(farmerId,goods);
     }
     @DeleteMapping("/farmer/self/goods")
@@ -67,6 +77,11 @@ public class FarmerController {
     @ResponseBody
     public JSONObject putResources(@RequestBody String body){
         return farmerService.applyResources(body);
+    }
+    @PostMapping("/resources")
+    @ResponseBody
+    public JSONObject changeResources(@RequestBody String body){
+        return farmerService.changeResources(body);
     }
     @GetMapping("/resources")
     @ResponseBody

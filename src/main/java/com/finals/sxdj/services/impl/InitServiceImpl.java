@@ -49,7 +49,7 @@ public class InitServiceImpl implements InitService {
             User user = userMapper.queryUser(openId);
             if(user == null){
                 userMapper.insertNewUser(openId);
-                userMapper.insertNewAccount(openId);
+                userMapper.insertNewAccount(openId,10000);
                 userMapper.insertNewAccountDetail(openId,new Date(System.currentTimeMillis()),"充值",null,10000);
             }
 //            else {
