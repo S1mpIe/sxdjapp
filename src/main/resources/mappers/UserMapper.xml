@@ -18,7 +18,7 @@
         insert into user (open_id,user_cate) VALUES
                         (#{openId},'个人用户');
     </insert>
-    <insert id="insertNewAccount" parameterType="String">
+    <insert id="insertNewAccount" >
         insert into account (open_id, balance) VALUES (#{consumerId},#{number});
     </insert>
     <insert id="insertNewAccountDetail">

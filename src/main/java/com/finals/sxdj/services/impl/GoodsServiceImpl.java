@@ -1,10 +1,10 @@
 package com.finals.sxdj.services.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.finals.sxdj.model.CartGoods;
 import com.finals.sxdj.model.GoodsData;
 import com.finals.sxdj.model.sqlmodel.Comment;
+import com.finals.sxdj.model.sqlmodel.Order;
 import com.finals.sxdj.repository.GoodsMapper;
 import com.finals.sxdj.repository.OrderMapper;
 import com.finals.sxdj.services.GoodsService;
@@ -20,7 +20,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private OrderMapper orderMapper;
     @Override
-    public JSONObject getGoodsData(int goodsId,String openId) {
+    public JSONObject getGoodsData(long goodsId, String openId) {
         JSONObject jsonObject = new JSONObject();
         GoodsData goodsData = goodsMapper.queryGoodsById(goodsId);
         CartGoods cartGoods = orderMapper.queryShoppingCartGoods(openId, goodsId);
@@ -53,6 +53,14 @@ public class GoodsServiceImpl implements GoodsService {
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("status","success");
+        return jsonObject;
+    }
+
+    @Override
+    public JSONObject getGoodsOrders(long goodsId) {
+        Order[] orders = orderMapper.queryGoodsOrders(goodsId);
+        JSONObject jsonObject =new JSONObject();
+        jsonObject.put("orders",orders);
         return jsonObject;
     }
 }

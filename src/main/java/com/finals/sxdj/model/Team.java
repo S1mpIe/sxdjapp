@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Team {
-    private int id;
+    private long id;
     private String name;
     private List<Teammate> mates;
 }

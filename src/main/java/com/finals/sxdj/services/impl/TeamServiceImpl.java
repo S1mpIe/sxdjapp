@@ -3,6 +3,7 @@ package com.finals.sxdj.services.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.finals.sxdj.model.*;
 import com.finals.sxdj.model.sqlmodel.Order;
+import com.finals.sxdj.model.sqlmodel.ShoppingAddress;
 import com.finals.sxdj.model.sqlmodel.TeamCart;
 import com.finals.sxdj.model.sqlmodel.Teammate;
 import com.finals.sxdj.repository.GoodsMapper;
@@ -49,17 +50,21 @@ public class TeamServiceImpl implements TeamService {
     public JSONObject applyNewTeammate(String teamCode, String mateId,String nickName) {
         String decrypt = DESEncryptTools.decrypt(teamCode);
         Team[] teams = teamMapper.queryMateTeam(mateId);
-        long teamId = Long.parseLong(decrypt);
         JSONObject jsonObject = new JSONObject();
-        for (Team team: teams) {
-            if (team.getId() == teamId){
-                jsonObject.put("status","failed");
-                jsonObject.put("errmsg","您不能加入已经加入的团队");
-                return jsonObject;
+        try {
+            long teamId = Long.parseLong(decrypt);
+            for (Team team: teams) {
+                if (team.getId() == teamId){
+                    jsonObject.put("status","failed");
+                    jsonObject.put("errmsg","您不能加入已经加入的团队");
+                    return jsonObject;
+                }
             }
+            teamMapper.insertNewTeammates(teamId,mateId,"成员",nickName);
+            jsonObject.put("status","success");
+        } catch (NumberFormatException e) {
+            jsonObject.put("status","failed");
         }
-        teamMapper.insertNewTeammates(teamId,mateId,"成员",nickName);
-        jsonObject.put("status","success");
         return jsonObject;
     }
 
@@ -94,6 +99,7 @@ public class TeamServiceImpl implements TeamService {
                     for (TeamCart cart:teamCarts) {
                         if (i == cart.getId()){
                             GoodsData goodsData = goodsMapper.queryGoodsById(cart.getGoodsId());
+                            System.out.println(goodsData.toString());
                             if (goodsData.getNumber() < cart.getGoodsNumber()){
                                 jsonObject.put("status","failed");
                                 jsonObject.put("errmsg",goodsData.getName() + "库存不足");
@@ -102,6 +108,7 @@ public class TeamServiceImpl implements TeamService {
                             }else {
                                 goodsMapper.increaseSaleNumber(goodsData.getId(),cart.getGoodsNumber());
                                 double totalPrice = goodsData.getPrice() * cart.getGoodsNumber();
+                                userMapper.updateConsumerBalance("farmer-" + goodsData.getOriginId(),Double.parseDouble(String.format("%.2f", (userMapper.queryCount("farmer-" + goodsData.getOriginId()).getBalance() + totalPrice*0.92 ))));
                                 total += goodsData.getPrice() * cart.getGoodsNumber();
                                 orderMapper.insertNewOrderData(orderId,goodsData.getId(),cart.getGoodsNumber(),goodsData.getPrice(),(double) Math.round(total * 100) /100);
                                 teamMapper.bookCart(cart.getId());
@@ -116,8 +123,10 @@ public class TeamServiceImpl implements TeamService {
                     TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 }else {
                     orderMapper.insertNewOrder(orderId,"team-" + orders.getTeamId(),new Date(System.currentTimeMillis()),total,orders.getAddressId());
-                    userMapper.updateConsumerBalance("team-" + orders.getTeamId(),account.getBalance()-(double) Math.round(total * 100) / 100);
+                    userMapper.updateConsumerBalance("team-" + orders.getTeamId(),Double.valueOf(String.format("%.2f", account.getBalance()-(double) Math.round(total * 100) / 100 )));
                     userMapper.insertNewAccountDetail("team-" + orders.getTeamId(),new Date(System.currentTimeMillis()),"消费",orderId,-1 * total);
+                    ShoppingAddress addressId = orderMapper.queryShoppingAddress(orders.getAddressId());
+                    userMapper.updateConsumerBalance("extract-" + orders.getAddressId(),Double.valueOf(String.format("%.2f", userMapper.queryCount("extract-" + addressId.getPointId()).getBalance() + total * 0.08 )));
                     jsonObject.put("status","success");
                 }
             }
@@ -141,7 +150,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public JSONObject putNewGoods(String openId, long teamId, int goodsId, int number) {
+    public JSONObject putNewGoods(String openId, long teamId, long goodsId, int number) {
         Teammate teammate = teamMapper.queryMate(openId, teamId);
         TeamCart cart = teamMapper.queryMateSingleCart(openId, teamId, goodsId);
         if (cart == null) {
@@ -265,13 +274,13 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public JSONObject changeNickName(long teamId, int mateId, String nickName) {
+    public JSONObject changeNickName(long teamId, long mateId, String nickName) {
         teamMapper.updateTeammate(teamId,mateId,"nickname",nickName);
         return null;
     }
 
     @Override
-    public JSONObject transferLeader(int leaderId, int mateId, long teamId) {
+    public JSONObject transferLeader(long leaderId, long mateId, long teamId) {
         teamMapper.updateTeammate(teamId,leaderId,"status","成员");
         teamMapper.updateTeammate(teamId,mateId,"status","队长");
         return null;

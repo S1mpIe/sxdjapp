@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class TeamCarts {
-    private int mateId;
+    private long mateId;
     private long teamsId;
     private String nickName;
     private List<TeamCart> carts;

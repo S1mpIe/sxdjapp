@@ -15,7 +15,7 @@ public class TeamCart {
     private long sourceId;
     private String openId;
     private long teamId;
-    private int goodsId;
+    private long goodsId;
     private int goodsNumber;
     private Date putTime;
     private String status;

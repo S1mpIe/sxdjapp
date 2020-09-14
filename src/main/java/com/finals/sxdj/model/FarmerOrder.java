@@ -12,7 +12,7 @@ import java.util.Date;
 public class FarmerOrder {
     private long orderId;
     private Date putTime;
-    private int goodsId;
+    private long goodsId;
     private int goodsNumber;
     private double goodsPrice;
     private String numberUnit;

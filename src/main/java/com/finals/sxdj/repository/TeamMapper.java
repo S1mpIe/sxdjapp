@@ -12,7 +12,7 @@ import java.util.Date;
 public interface TeamMapper {
     void insertNewTeam(long id,String name);
     void insertNewTeammates(long teamId,String openId,String status,String nickName);
-    void insertCart(String openId, long teamId, Date time,int sourceId,int goodsId,int number);
+    void insertCart(String openId, long teamId, Date time, long sourceId, long goodsId, int number);
     Team[] queryMateTeam(String mateId);
     Teammate queryMate(String openId,long teamId);
     Teammate queryMateById(long id);
@@ -22,11 +22,11 @@ public interface TeamMapper {
     TeamCart[] queryMateCart(long teamId,String openId);
     TeamCart[] queryMateCartById(long teamId,long sourceId);
     TeamCart queryCartById(long cartId);
-    TeamCart queryMateSingleCart(String openId,long teamId,int goodsId);
-    void updateCart(String openId,long teamId,int goodsId,int number);
+    TeamCart queryMateSingleCart(String openId, long teamId, long goodsId);
+    void updateCart(String openId, long teamId, long goodsId, int number);
     void bookCart(long cartId);
-    void updateTeammate(long teamId,int mateId,String key,String value);
+    void updateTeammate(long teamId, long mateId, String key, String value);
     int deleteCart(long cartId);
-    int quitTeam(long teamId,int mateId);
+    int quitTeam(long teamId, long mateId);
     void deleteTeammate(long mateId);
 }

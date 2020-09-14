@@ -42,12 +42,12 @@ public class TeamController {
     }
     @PostMapping("/teammate")
     @ResponseBody
-    public JSONObject changeNickName(@RequestParam("teamId")long teamId,@RequestParam("mateId")int mateId,@RequestParam("nickName")String nickName){
+    public JSONObject changeNickName(@RequestParam("teamId")long teamId,@RequestParam("mateId")long mateId,@RequestParam("nickName")String nickName){
         return teamService.changeNickName(teamId,mateId,nickName);
     }
     @PostMapping("/teammate/leader")
     @ResponseBody
-    public JSONObject transferLeader(@RequestParam("leaderId")int leaderId,@RequestParam("mateId")int mateId,@RequestParam("teamId")long teamId){
+    public JSONObject transferLeader(@RequestParam("leaderId")long leaderId,@RequestParam("mateId")long mateId,@RequestParam("teamId")long teamId){
         return teamService.transferLeader(leaderId,mateId,teamId);
     }
     @GetMapping("/teammate")
@@ -87,7 +87,7 @@ public class TeamController {
     }
     @PutMapping("/team/cart")
     @ResponseBody
-    public JSONObject addGoodsToTeamCart(HttpServletRequest request,@RequestParam("teamId")long teamId,@RequestParam("goodsId") int goodsId,@RequestParam("number")int number) {
+    public JSONObject addGoodsToTeamCart(HttpServletRequest request,@RequestParam("teamId")long teamId,@RequestParam("goodsId") long goodsId,@RequestParam("number")int number) {
         return teamService.putNewGoods(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"), teamId, goodsId, number);
     }
     @PostMapping("/team/cart")

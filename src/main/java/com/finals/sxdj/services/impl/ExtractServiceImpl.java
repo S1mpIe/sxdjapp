@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.finals.sxdj.model.sqlmodel.ExtractPoint;
 import com.finals.sxdj.repository.ExtractMapper;
 import com.finals.sxdj.repository.OrderMapper;
+import com.finals.sxdj.repository.UserMapper;
 import com.finals.sxdj.services.ExtractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,13 @@ public class ExtractServiceImpl implements ExtractService {
     public ExtractMapper extractMapper;
     @Autowired
     public OrderMapper orderMapper;
+    @Autowired
+    private UserMapper userMapper;
     @Override
     public JSONObject insertNewAuditedPoint(String openId,ExtractPoint point) {
-        int number = extractMapper.insertNewPoint(openId,point);
+        long id = System.currentTimeMillis()/100;
+        int number = extractMapper.insertNewPoint(id,openId,point);
+        userMapper.insertNewAccount("extract-" + id,0);
         JSONObject jsonObject = new JSONObject();
         if(number == 1){
             jsonObject.put("status","success");
@@ -28,6 +33,7 @@ public class ExtractServiceImpl implements ExtractService {
 
     @Override
     public JSONObject getNearbyPoint(double latitude, double longitude) {
+        long id = System.currentTimeMillis()/100;
         for (int i = 0;i < 5;i++){
             ExtractPoint point = new ExtractPoint();
             point.setAddress("中国湖南长沙");
@@ -38,7 +44,9 @@ public class ExtractServiceImpl implements ExtractService {
             point.setIdNumber("430XXXXXXXXXX");
             point.setPhoneNumber("14707348710");
             point.setName("样例自提点-" + i);
-            extractMapper.insertNewPoint("example",point);
+
+            extractMapper.insertNewPoint(id + i, "example",point);
+            userMapper.insertNewAccount("extract-" + id + i,0);
         }
         ExtractPoint[] extractPoints = extractMapper.queryAllActivePoint(latitude, longitude, 8);
         JSONObject jsonObject = new JSONObject();
@@ -66,7 +74,7 @@ public class ExtractServiceImpl implements ExtractService {
     }
 
     @Override
-    public JSONObject receiveGoods(String openId, int orderId) {
+    public JSONObject receiveGoods(String openId, long orderId) {
         orderMapper.updateOrder(orderId,"status","待提货");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("status","success");
@@ -77,5 +85,12 @@ public class ExtractServiceImpl implements ExtractService {
     public JSONObject updatePointStatus(String openId, String status) {
         extractMapper.updatePointStatus(openId,status);
         return null;
+    }
+
+    @Override
+    public JSONObject getAccount(long id) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("account",userMapper.queryCount("extract-" + id));
+        return jsonObject;
     }
 }

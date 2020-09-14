@@ -11,6 +11,6 @@ import java.util.List;
 @ToString
 public class TeamOrders {
     private long teamId;
-    private int addressId;
+    private long addressId;
     private List<TeammateOrder> mateOrders;
 }

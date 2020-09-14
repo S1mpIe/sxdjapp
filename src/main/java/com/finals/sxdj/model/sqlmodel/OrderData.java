@@ -18,5 +18,5 @@ public class OrderData {
     private double goodsPrice;
     private double goodsTotalPrice;
     private String origin;
-    private int originId;
+    private long originId;
 }

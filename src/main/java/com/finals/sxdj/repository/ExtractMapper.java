@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface ExtractMapper {
-    int insertNewPoint(String openId,ExtractPoint point);
+    int insertNewPoint(long id, String openId, ExtractPoint point);
     int updatePointStatus(String openId,String status);
     ExtractPoint queryPersonPoint(String openId);
     ExtractPoint[] queryAllPoint(String status);

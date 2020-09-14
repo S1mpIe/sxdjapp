@@ -40,8 +40,8 @@ public class UserController {
     }
     @PostMapping("/account")
     @ResponseBody
-    public JSONObject updatePersonAccount(HttpServletRequest request,@RequestParam("number")double number){
-        return userService.updateAccount(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),number);
+    public JSONObject updatePersonAccount(HttpServletRequest request,@RequestParam("number")double number,@RequestParam("cate")String cate,@RequestParam("id")long id){
+        return userService.updateAccount(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),number,cate,id);
     }
 
     @GetMapping("/account/detail")

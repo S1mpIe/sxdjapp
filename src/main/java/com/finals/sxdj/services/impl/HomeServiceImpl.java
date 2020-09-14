@@ -1,6 +1,5 @@
 package com.finals.sxdj.services.impl;
 import com.alibaba.fastjson.JSONObject;
-import com.finals.sxdj.model.Navigation;
 import com.finals.sxdj.model.sqlmodel.Farmers;
 import com.finals.sxdj.repository.FarmerMapper;
 import com.finals.sxdj.repository.GoodsMapper;
@@ -9,11 +8,8 @@ import com.finals.sxdj.repository.RecommendMapper;
 import com.finals.sxdj.services.HomeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 @Service
 @Slf4j
@@ -42,7 +38,7 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
-    public String getRecommendGoods(int recommendId) {
+    public String getRecommendGoods(long recommendId) {
         return JSONObject.toJSONString(goodsMapper.queryGoodsByRecommend(recommendId));
     }
 

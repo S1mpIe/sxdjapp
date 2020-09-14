@@ -29,7 +29,7 @@ public class OrderController {
 
     @PostMapping("/order")
     @ResponseBody
-    public JSONObject receiveGoods(@RequestParam("orderId")int orderId,HttpServletRequest request){
+    public JSONObject receiveGoods(@RequestParam("orderId")long orderId,HttpServletRequest request){
         return orderService.receiveGoods(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),orderId);
     }
     @GetMapping("/order")
@@ -40,7 +40,7 @@ public class OrderController {
 
     @PostMapping("/shoppingCart")
     @ResponseBody
-    public JSONObject putNewGoods(HttpServletRequest request,@RequestParam("id")int id,@RequestParam("number")int number){
+    public JSONObject putNewGoods(HttpServletRequest request,@RequestParam("id")long id,@RequestParam("number")int number){
         return orderService.putGoods(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),id,number);
     }
     @GetMapping("/shoppingCart")
@@ -50,7 +50,7 @@ public class OrderController {
     }
     @DeleteMapping("/shoppingCart")
     @ResponseBody
-    public JSONObject deleteShoppingCart(HttpServletRequest request,@RequestParam("id")int id){
+    public JSONObject deleteShoppingCart(HttpServletRequest request,@RequestParam("id")long id){
         return orderService.deleteShoppingCart(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),id);
     }
 
@@ -62,7 +62,7 @@ public class OrderController {
 
     @PutMapping("/shoppingAddress")
     @ResponseBody
-    public JSONObject addNewShoppingAddress(HttpServletRequest request, @RequestParam("pointId")int pointId,@RequestParam("name")String name,@RequestParam("phoneNumber")long number){
+    public JSONObject addNewShoppingAddress(HttpServletRequest request, @RequestParam("pointId")long pointId,@RequestParam("name")String name,@RequestParam("phoneNumber")long number){
         return orderService.addShoppingAddress(name,pointId,number,JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
     }
 }

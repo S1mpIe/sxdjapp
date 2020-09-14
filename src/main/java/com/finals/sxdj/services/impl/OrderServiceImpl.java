@@ -5,6 +5,7 @@ import com.finals.sxdj.model.Account;
 import com.finals.sxdj.model.CartGoods;
 import com.finals.sxdj.model.GoodsData;
 import com.finals.sxdj.model.sqlmodel.Order;
+import com.finals.sxdj.model.sqlmodel.ShoppingAddress;
 import com.finals.sxdj.repository.GoodsMapper;
 import com.finals.sxdj.repository.OrderMapper;
 import com.finals.sxdj.repository.UserMapper;
@@ -41,14 +42,15 @@ public class OrderServiceImpl implements OrderService {
         while (iterator.hasNext()){
             log.error("iteratoring...");
             Map.Entry next = (Map.Entry) iterator.next();
-            int goodsId = Integer.valueOf((String) next.getKey());
+            Long goodsId = Long.valueOf((String) next.getKey());
             int number = (int)next.getValue();
             GoodsData goodsData = goodsMapper.queryGoodsById(goodsId);
             if(goodsData.getNumber() >= number){
                 goodsMapper.increaseSaleNumber(goodsData.getId(),number);
                 double totalPrice = number * goodsData.getPrice();
                 totalPay += totalPrice;
-                orderMapper.insertNewOrderData(orderId,goodsData.getId(),number,goodsData.getPrice(),totalPrice);
+                userMapper.updateConsumerBalance("farmer-" + goodsData.getOriginId(),Double.valueOf(String.format("%.2f", (userMapper.queryCount("farmer-" + goodsData.getOriginId()).getBalance() + totalPrice*0.92) )));
+                orderMapper.insertNewOrderData(orderId,goodsData.getId(),number,goodsData.getPrice(),(double) Math.round(totalPay * 100) /100);
                 orderMapper.deleteShoppingCartGoods(openId,goodsData.getId());
             }else {
                 jsonObject.put("status","failed");
@@ -63,16 +65,18 @@ public class OrderServiceImpl implements OrderService {
             jsonObject.put("status","failed");
             jsonObject.put("msg","balance not enough");
         }else {
-            orderMapper.insertNewOrder(orderId,openId,new Date(System.currentTimeMillis()),totalPay,orderJson.getIntValue("addressId"));
-            userMapper.updateConsumerBalance(openId,account.getBalance()-(double) Math.round(totalPay * 100) / 100);
+            orderMapper.insertNewOrder(orderId,openId,new Date(System.currentTimeMillis()),Double.valueOf(String.format("%.2f",totalPay)),orderJson.getIntValue("addressId"));
+            userMapper.updateConsumerBalance(openId,Double.valueOf(String.format("%.2f", account.getBalance()-(double) Math.round(totalPay * 100) / 100 )));
             userMapper.insertNewAccountDetail(openId,new Date(System.currentTimeMillis()),"消费", (long) orderId,-1 * totalPay);
+            ShoppingAddress addressId = orderMapper.queryShoppingAddress(orderJson.getLongValue("addressId"));
+            userMapper.updateConsumerBalance("extract-" + orderJson.getIntValue("addressId"),Double.valueOf(String.format("%.2f", userMapper.queryCount("extract-" + addressId.getPointId()).getBalance() + totalPay * 0.08 )));
             jsonObject.put("status","success");
         }
         return jsonObject;
     }
 
     @Override
-    public JSONObject addShoppingAddress(String name,int pointId,long number, String openId) {
+    public JSONObject addShoppingAddress(String name, long pointId, long number, String openId) {
 //        System.out.println(body);
 //        JSONObject requestJson = JSONObject.parseObject(body);
 //        ShoppingAddress address = (ShoppingAddress) requestJson.get("address");
@@ -83,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public JSONObject putGoods(String openId, int goodsId, int number) {
+    public JSONObject putGoods(String openId, long goodsId, int number) {
         JSONObject jsonObject = new JSONObject();
         if (number < 0){
             jsonObject.put("status","failed");
@@ -105,7 +109,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public JSONObject receiveGoods(String openId, int orderId) {
+    public JSONObject receiveGoods(String openId, long orderId) {
         JSONObject jsonObject = new JSONObject();
         orderMapper.updateOrder(orderId,"status","已完成");
         jsonObject.put("status","success");
@@ -140,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public JSONObject deleteShoppingCart(String openId, int goodsId) {
+    public JSONObject deleteShoppingCart(String openId, long goodsId) {
         JSONObject jsonObject = new JSONObject();
         orderMapper.deleteShoppingCartGoods(openId,goodsId);
         jsonObject.put("status","success");

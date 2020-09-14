@@ -34,7 +34,7 @@ public class FarmerController {
     }
     @GetMapping("/farmer/goods")
     @ResponseBody
-    public JSONObject getAllGoods(@RequestParam("farmerId") int farmerId){
+    public JSONObject getAllGoods(@RequestParam("farmerId") long farmerId){
         return farmerService.queryAllSold(farmerId);
     }
     @PutMapping("/farmer/self/goods")
@@ -55,12 +55,12 @@ public class FarmerController {
     }
     @DeleteMapping("/farmer/self/goods")
     @ResponseBody
-    public JSONObject deleteGoods(@RequestParam("cate")String cate,int goodsId){
+    public JSONObject deleteGoods(@RequestParam("cate")String cate,long goodsId){
         return farmerService.deleteGoods(goodsId, cate);
     }
     @GetMapping("/farmer")
     @ResponseBody
-    public JSONObject getFarmerById(@RequestParam("farmerId")int id){
+    public JSONObject getFarmerById(@RequestParam("farmerId")long id){
         return farmerService.queryFarmerById(id);
     }
     @PostMapping("/farmer/upload")
@@ -85,12 +85,12 @@ public class FarmerController {
     }
     @GetMapping("/resources")
     @ResponseBody
-    public JSONObject getResources(@RequestParam("cate")String cate,@RequestParam("id")int id){
+    public JSONObject getResources(@RequestParam("cate")String cate,@RequestParam("id")long id){
         return farmerService.queryResources(cate, id);
     }
     @GetMapping("/farmer/orders")
     @ResponseBody
-    public JSONObject getOrders(@RequestParam("farmerId")int farmerId){
+    public JSONObject getOrders(@RequestParam("farmerId")long farmerId){
         return farmerService.getFarmerOrders(farmerId);
     }
 }

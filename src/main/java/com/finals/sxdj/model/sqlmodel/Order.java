@@ -20,6 +20,6 @@ public class Order {
     private List<OrderData> goods;
     private double pay;
     private String receiver;
-    private int extractPoint;
+    private long extractPoint;
     private String extractAddress;
 }

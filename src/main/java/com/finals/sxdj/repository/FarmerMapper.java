@@ -20,10 +20,10 @@ public interface FarmerMapper {
      */
     Farmers[] queryAllFarmers();
     Farmers queryFarmer(String openId);
-    Farmers queryFarmerById(int farmerId);
+    Farmers queryFarmerById(long farmerId);
     GoodsData[] queryAllSold(long farmerId);
     Resources[] getResource(String cate, long owner);
-    Order[] queryFarmerOrder(int farmerId);
+    Order[] queryFarmerOrder(long farmerId);
     int insertVerifiedFarmer(Farmers farmers);
     int insertNewGoods(long id, GoodsData goods, long farmerId);
     int insertPathData(long id, String url);

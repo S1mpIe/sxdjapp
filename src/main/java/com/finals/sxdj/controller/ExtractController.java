@@ -35,12 +35,17 @@ public class ExtractController {
     }
     @PostMapping("/extract/orders")
     @ResponseBody
-    public JSONObject receiveGoods(HttpServletRequest request,@RequestParam("orderId")int orderId){
+    public JSONObject receiveGoods(HttpServletRequest request,@RequestParam("orderId")long orderId){
         return extractService.receiveGoods(JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"),orderId);
     }
     @GetMapping("/extract/near")
     @ResponseBody
     public JSONObject getNearPoint(@RequestParam("latitude")double latitude,@RequestParam("longitude")double longitude){
         return extractService.getNearbyPoint(latitude, longitude);
+    }
+    @GetMapping("/extract/account")
+    @ResponseBody
+    public JSONObject getExtractAccount(@RequestParam("id")long id){
+        return extractService.getAccount(id);
     }
 }

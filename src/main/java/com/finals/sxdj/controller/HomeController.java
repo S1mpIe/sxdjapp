@@ -30,7 +30,7 @@ public class HomeController {
 
     @RequestMapping(value = "/recommendGoods",method = RequestMethod.GET)
     @ResponseBody
-    public String getRecommendGoods(@RequestParam("recommendId")int id){
+    public String getRecommendGoods(@RequestParam("recommendId")long id){
         return homeService.getRecommendGoods(id);
     }
 

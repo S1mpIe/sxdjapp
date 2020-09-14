@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class CartGoods {
-    private int id;
+    private long id;
     private int number;
 }

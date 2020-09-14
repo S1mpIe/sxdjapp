@@ -10,5 +10,5 @@ public interface UserService {
     JSONObject addNewAccount(String openId);
     JSONObject getTeammates(String openId);
     JSONObject getAccountDetail(String consumerId);
-    JSONObject updateAccount(String openId, double number);
+    JSONObject updateAccount(String openId, double number,String cate,long id);
 }

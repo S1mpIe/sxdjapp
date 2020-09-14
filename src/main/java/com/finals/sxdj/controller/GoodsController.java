@@ -16,7 +16,7 @@ public class GoodsController {
 
     @GetMapping("/goods")
     @ResponseBody
-    public JSONObject getSingleGoods(HttpServletRequest request, @RequestParam("goodsId")int goodsId){
+    public JSONObject getSingleGoods(HttpServletRequest request, @RequestParam("goodsId")long goodsId){
         return goodsService.getGoodsData(goodsId, JwtUtil.getPayLoad(request.getHeader("accessToken")).getString("openId"));
     }
     @GetMapping("/goods/comment")
@@ -28,5 +28,10 @@ public class GoodsController {
     @ResponseBody
     public JSONObject putGoodsComment(@RequestBody String body){
         return goodsService.putGoodsComment(body);
+    }
+    @GetMapping("/goods/orders")
+    @ResponseBody
+    public JSONObject getGoodsOrders(@RequestParam("goodsId")long goodsId){
+        return goodsService.getGoodsOrders(goodsId);
     }
 }

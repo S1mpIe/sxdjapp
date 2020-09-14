@@ -65,7 +65,7 @@
         where tc.team_id=#{teamId} and tc.status='已提交'
     </select>
     <select id="queryMateSingleCart" resultMap="TeamCart">
-        select * from team_cart where open_id=#{openId} and goods_id=#{goodsId} and team_id=#{teamId}
+        select * from team_cart where open_id=#{openId} and goods_id=#{goodsId} and team_id=#{teamId} and status='已提交'
     </select>
     <select id="queryMateCart" resultMap="TeamCart">
         select tc.id,
@@ -80,7 +80,7 @@
                left join goods g on g.id=tc.goods_id
                left join goods_number gn on g.id = gn.goods_id
                left join goods_price gp on g.id = gp.goods_id
-        where tc.open_id=#{openId} and tc.team_id=#{teamId}
+        where tc.open_id=#{openId} and tc.team_id=#{teamId} and tc.status='已提交'
     </select>
     <select id="queryCartById" resultMap="TeamCart">
         select tc.id,

@@ -9,7 +9,7 @@ public interface TeamService {
     JSONObject deleteTeamCart(String openId,long cartId);
     JSONObject putNewOrder(String openId, TeamOrders orders);
     JSONObject receiveOrders(String openId,long orderId,long teamId);
-    JSONObject putNewGoods(String openId,long teamId,int goodsId,int number);
+    JSONObject putNewGoods(String openId, long teamId, long goodsId, int number);
     JSONObject getTeamRecords(long teamId);
     JSONObject getTeam(String mateId);
     JSONObject getTeamDisCount(String mateId);
@@ -27,9 +27,9 @@ public interface TeamService {
 
     JSONObject quitTeam(long teamId, String openId);
 
-    JSONObject changeNickName(long teamId, int mateId, String nickName);
+    JSONObject changeNickName(long teamId, long mateId, String nickName);
 
-    JSONObject transferLeader(int leaderId, int mateId, long teamId);
+    JSONObject transferLeader(long leaderId, long mateId, long teamId);
 
     JSONObject changeGoods(long teamId, String openId, long id, int number);
 }

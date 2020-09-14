@@ -22,7 +22,7 @@
         select * from farmers where id=#{farmerId}
     </select>
     <insert id="insertVerifiedFarmer" useGeneratedKeys="true" keyProperty="id" >
-        insert into farmers (open_id, name, introduce, image_address, cate, status) values (#{openId},#{name},#{introduce},#{imageAddress},#{cate},'已通过')
+        insert into farmers (open_id, name, phone,introduce, image_address, cate, status) values (#{openId},#{name},#{phone},#{introduce},#{imageAddress},#{cate},'已通过')
     </insert>
     <insert id="insertNewGoods" >
         insert into goods (id,name, origin_id, image_address, category) VALUES (#{id},#{goods.name},#{farmerId},#{goods.imageUrl},#{goods.category});
@@ -30,10 +30,10 @@
         insert into goods_price (goods_id, number, unti) VALUES (#{id},#{goods.price},#{goods.numberUnit})
     </insert>
     <insert id="insertPathData">
-        insert into path_data (url, id) VALUES (#{url},#{ids})
+        insert into path_data (url, id) VALUES (#{url},#{id})
     </insert>
     <insert id="insertResource" >
-        insert into resources (owner, cate, path_id) VALUES (#{owner},#{cate},#{id})
+        insert into resources (owner, cate, path_id) VALUES (#{owner},#{cate},#{ids})
     </insert>
     <select id="getResource" resultMap="Resources">
         select resources.*,pd.url,pd.id as pathId from resources left join path_data pd on pd.id=resources.path_id where resources.cate=#{cate} and resources.owner=#{owner}
@@ -97,7 +97,7 @@
         update goods_number
         <set>
             <if test="number != null and number != ''">
-                number=(#{number} + sale_number},
+                number=(#{number} + sale_number),
             </if>
             <if test="numberUnit != null and numberUnit != ''">
                 unit=#{numberUnit},
@@ -107,7 +107,7 @@
         update goods_price
         <set>
             <if test="price != null and price != ''">
-                price=#{price},
+                number=#{price},
             </if>
         </set>
         where goods_id=#{id};

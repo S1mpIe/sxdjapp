@@ -29,7 +29,7 @@
         insert into shopping_cart (open_id, goods_id, goods_number) VALUES (#{openId},#{goodsId},#{number})
     </insert>
     <insert id="insertNewShoppingAddress">
-        insert into shopping_address (open_id, name, phone_number, extract_point) VALUES (#{openId},#{name},#{number},#{pointId})
+        insert into shopping_address (consumer_id, name, phone_number, extract_point) VALUES (#{openId},#{name},#{number},#{pointId})
     </insert>
     <update id="updateOrder">
         update `order` set ${cate}=#{value} where id=#{id}
@@ -115,6 +115,35 @@
             from shopping_address sa
             left join extract_point ep on ep.id=sa.extract_point
             where sa.consumer_id=#{consumerId}
+    </select>
+    <select id="queryShoppingAddress" resultMap="ShoppingAddress">
+        select sa.id as saId,
+               sa.name as saName,
+               sa.phone_number as saPhoneNumber,
+               sa.extract_point as pointId,
+               ep.*
+        from shopping_address sa
+                 left join extract_point ep on ep.id=sa.extract_point
+        where sa.id=#{addressId}
+    </select>
+    <select id="queryGoodsOrders" resultMap="Order">
+        select
+            o.id, result_time, put_time, over_time,o. status, pay,
+            od.*,
+            g.image_address as imageUrl,
+            g.name as name,
+            sa.name as receiver,
+            f.id as originId,
+            f.name as origin,
+            ep.id as extractPoint,
+            ep.address as extractAddress
+        from `order` as o
+                 left join order_data od on o.id = od.order_id
+                 left join goods g on od.goods_id = g.id
+                 left join farmers f on f.id=g.origin_id
+                 left join shopping_address sa on sa.id=o.address_id
+                 left join extract_point ep on ep.id=sa.extract_point
+        where g.id=#{goodsId}
     </select>
     <delete id="deleteShoppingCartGoods">
         delete from shopping_cart where goods_id=#{goodsId} and open_id=#{openId}

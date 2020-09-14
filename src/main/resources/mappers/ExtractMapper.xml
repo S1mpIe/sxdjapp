@@ -10,8 +10,9 @@
     </select>
 
     <insert id="insertNewPoint">
-        insert into extract_point (owner,open_id,id_number,name, phone_number, address, area, status)
-        values (#{point.owner},
+        insert into extract_point (id,owner,open_id,id_number,name, phone_number, address, area, status)
+        values (#{id},
+                #{point.owner},
                 #{openId},
                 #{point.idNumber},
                 #{point.name},
@@ -27,7 +28,7 @@
     </update>
 
     <select id="queryAllActivePoint" resultMap="ExtractPoints">
-        select * from extract_point where (latitude - #{latitude}) &lt; #{disparity} and (longitude - #{latitude}) &lt; #{disparity} where status='正在营业';
+        select * from extract_point where (latitude - #{latitude}) &lt; #{disparity} and (longitude - #{latitude}) &lt; #{disparity} and status='正在营业';
     </select>
 
 </mapper>

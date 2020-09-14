@@ -8,7 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Resources {
-    private int id;
+    private long id;
     private String cate;
     private long owner;
     private long pathId;

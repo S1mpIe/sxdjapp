@@ -9,6 +9,8 @@ import com.finals.sxdj.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -69,8 +71,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JSONObject updateAccount(String openId, double number) {
-        userMapper.updateConsumerBalance(openId,userMapper.queryCount(openId).getBalance() + number);
-        return null;
+    public JSONObject updateAccount(String openId, double number, String cate, long id) {
+        String userId = openId;
+        if(!"person".equals(cate)){
+            userId = cate + "-" + id;
+        }
+        Double overBalance = Double.valueOf(String.format("%.2f", userMapper.queryCount(userId).getBalance() + number ));
+        userMapper.updateConsumerBalance(userId,overBalance);
+        userMapper.insertNewAccountDetail(userId,new Date(System.currentTimeMillis()),"充值",null,number);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("balance",overBalance);
+        jsonObject.put("details",userMapper.queryAccountDetail(userId));
+        return jsonObject;
     }
 }

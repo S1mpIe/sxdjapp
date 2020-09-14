@@ -8,9 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class ShoppingAddress {
-    private int id;
+    private long id;
     private String name;
     private String phoneNumber;
-    private int pointId;
+    private long pointId;
     private ExtractPoint point;
 }

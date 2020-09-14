@@ -37,6 +37,7 @@ public class FarmerServiceImpl implements FarmerService {
         userMapper.insertNewAccount("farmer-"+farmers.getId(),0);
         JSONObject jsonObject = new JSONObject();
         if(i == 1){
+            jsonObject.put("id",farmers.getId());
             jsonObject.put("status","success");
         }else {
             jsonObject.put("status","failed");
@@ -59,7 +60,7 @@ public class FarmerServiceImpl implements FarmerService {
     }
 
     @Override
-    public JSONObject queryAllSold(int farmerId) {
+    public JSONObject queryAllSold(long farmerId) {
         GoodsData[] goodsData = farmerMapper.queryAllSold(farmerId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("goods",goodsData);
@@ -88,7 +89,7 @@ public class FarmerServiceImpl implements FarmerService {
     }
 
     @Override
-    public JSONObject queryFarmerById(int farmerId) {
+    public JSONObject queryFarmerById(long farmerId) {
         Farmers farmers = farmerMapper.queryFarmerById(farmerId);
         farmers.setOpenId(null);
         JSONObject jsonObject = new JSONObject();
@@ -97,6 +98,7 @@ public class FarmerServiceImpl implements FarmerService {
     }
 
     @Override
+    @Transactional
     public JSONObject updateGoods(long farmerId, GoodsData goodsData) {
         farmerMapper.updateGoods(goodsData);
         JSONObject jsonObject = new JSONObject();
@@ -105,7 +107,7 @@ public class FarmerServiceImpl implements FarmerService {
     }
 
     @Override
-    public JSONObject deleteGoods(int goodsId, String cate) {
+    public JSONObject deleteGoods(long goodsId, String cate) {
         JSONObject jsonObject = new JSONObject();
         if(cate.equals("delete")){
             goodsMapper.deleteGoods(goodsId);
@@ -177,7 +179,7 @@ public class FarmerServiceImpl implements FarmerService {
     }
 
     @Override
-    public JSONObject getFarmerOrders(int farmerId) {
+    public JSONObject getFarmerOrders(long farmerId) {
         JSONObject jsonObject= new JSONObject();
         jsonObject.put("orders",farmerMapper.queryFarmerOrder(farmerId));
         return jsonObject;
@@ -196,10 +198,10 @@ public class FarmerServiceImpl implements FarmerService {
         JSONObject jsonObject = JSONObject.parseObject(body);
         long owner = jsonObject.getLong("owner");
         String cate = jsonObject.getString("cate");
-        List<Long> ids = (List) jsonObject.get("ids");
+        List<Long> ids = (List<Long>) jsonObject.get("ids");
         farmerMapper.deleteAllResource(owner,cate);
-        for(long id:ids){
-            farmerMapper.insertResource(owner,cate,id);
+        for(int index = 0;index < ids.size();index ++){
+            farmerMapper.insertResource(owner,cate,Long.parseLong(String.valueOf(ids.get(index))));
         }
         return null;
     }

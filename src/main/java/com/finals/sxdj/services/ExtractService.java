@@ -8,6 +8,8 @@ public interface ExtractService {
     JSONObject getNearbyPoint(double latitude,double longitude);
     JSONObject getPersonPoint(String openId);
     JSONObject getAllAuditedPoint();
-    JSONObject receiveGoods(String openId,int orderId);
+    JSONObject receiveGoods(String openId,long orderId);
     JSONObject updatePointStatus(String openId, String status);
+
+    JSONObject getAccount(long id);
 }

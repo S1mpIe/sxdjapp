@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class ExtractPoint {
-    private int id;
+    private long id;
     private String owner;
     private String name;
     private String idNumber;

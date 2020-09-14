@@ -1,7 +1,5 @@
 package com.finals.sxdj.services;
 
-import com.alibaba.fastjson.JSONObject;
-
 public interface HomeService {
     /**
      * 获取导航栏轮播数据
@@ -20,7 +18,7 @@ public interface HomeService {
      * @param recommendId
      * @return
      */
-    String getRecommendGoods(int recommendId);
+    String getRecommendGoods(long recommendId);
 
     /**
      * 获取所有农户信息

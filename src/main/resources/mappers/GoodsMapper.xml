@@ -4,7 +4,7 @@
 <mapper namespace="com.finals.sxdj.repository.GoodsMapper">
     <resultMap id="GoodsData" type="GoodsData" autoMapping="true"/>
     <resultMap id="Comment" type="Comment" autoMapping="true"/>
-    <select id="queryGoodsByRecommend" resultMap="GoodsData" parameterType="int">
+    <select id="queryGoodsByRecommend" resultMap="GoodsData">
         select g.id as id,
                g.image_address as imageUrl,
                g.name as name,
